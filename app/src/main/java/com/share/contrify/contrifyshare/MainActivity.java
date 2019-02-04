@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     int perval = 1;
     Uri currFileURI;
     String unifil=null;
-
+    public String ip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         //DEFAULT_FILE = "android.resource://" + this.getPackageName() + "/raw/rewind_results"; //+ R.raw.rewind_results;
         //DEFAULT_FILE=Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.rewind_results).toString();
         //DEFAULT_FILE="file:///sdcard/rewind_results.html";
-
+        getcurrip();
         //WEB_ROOT = new File("File:///sdcard")
 
     }
@@ -129,6 +130,13 @@ public class MainActivity extends AppCompatActivity {
             {
                 Log.e("writetofile",e.toString());
             }
+        }
+        private void getcurrip()
+        {
+            ip=Utils.getIPAddress(true);
+            Log.i("IPA",ip);
+            TextView tv = findViewById(R.id.textView6);
+            tv.setText((ip+":53000"));
         }
 }
 

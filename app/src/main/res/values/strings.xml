@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Contrify Share</string>
+    <string name="step_1_txt">You must have a valid network connection</string>
+    <string name="step_1_desp">Ensure that this device and the remote are connected on the same network. Know more.</string>
+    <string name="step_3_txt">You have to open the URL in your remote\'s browser</string>
+    <string name="step_3_desp">0.0.0.0:53000</string>
+    <string name="step_2_txt">Select the files you wish to share. (Tap Here)</string>
+    <string name="step_2_desp">Only the files which you have selected will be available for upload</string>
+    <string name="step_4_txt">Download the files in your remote</string>
+    <string name="step_4_desp">You\'re done! Your host\'s browser will download the selected files</string>
+    <string name="ctd_steps">Image file steps</string>
 </resources>

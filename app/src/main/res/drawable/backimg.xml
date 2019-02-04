@@ -6,10 +6,10 @@
         <shape
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle" >
-            <solid android:color="efeced" />
+            <solid android:color="#efeced" />
         </shape>
     </item>
-    <item android:height="100dip">
+    <item android:height="80dip">
         <shape
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle" >
