@@ -9,4 +9,7 @@
     <string name="step_4_txt">Download the files in your remote</string>
     <string name="step_4_desp">You\'re done! Your host\'s browser will download the selected files</string>
     <string name="ctd_steps">Image file steps</string>
+    <string name="selfil">S E L E C T    F I L E S</string>
+    <string name="fs_but1">ADD FILES</string>
+    <string name="fs_but2">REMOVE</string>
 </resources>

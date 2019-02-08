@@ -4,6 +4,92 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backimg"
     tools:context=".fileselect">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="246dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/ctd_steps"
+        app:layout_constraintLeft_toRightOf="@id/imageView3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/sv_logo2" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="51dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/menu_vect"
+        android:contentDescription="@string/ctd_steps"/>
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="51dp"
+        android:layout_height="42dp"
+        android:onClick="svstart"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/power_sel"
+        android:contentDescription="@string/ctd_steps"/>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="250sp"
+        android:layout_height="28dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/calibri"
+        android:text="@string/selfil"
+        android:textColor="@android:color/black"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <Button
+        android:id="@+id/addfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:onClick="addfile"
+        android:padding="5dp"
+        android:text="@string/fs_but1"
+        android:background="@drawable/buttons"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filelst" />
+
+    <Button
+        android:id="@+id/rmfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:padding="5dp"
+        android:text="@string/fs_but2"
+        android:background="@drawable/buttons"
+        app:layout_constraintStart_toEndOf="@id/addfile"
+        app:layout_constraintTop_toBottomOf="@id/filelst" />
+
+    <ListView
+        android:id="@+id/filelst"
+        android:layout_width="330dp"
+        android:layout_height="352dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+
 
 </android.support.constraint.ConstraintLayout>

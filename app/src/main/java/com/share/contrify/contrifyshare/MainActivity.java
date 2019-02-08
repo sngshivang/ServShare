@@ -37,8 +37,6 @@ import java.util.StringTokenizer;
 public class MainActivity extends AppCompatActivity {
 
     int perval = 1;
-    Uri currFileURI;
-    String unifil=null;
     public String ip;
 
     @Override
@@ -75,68 +73,17 @@ public class MainActivity extends AppCompatActivity {
         //WEB_ROOT = new File("File:///sdcard")
 
     }
-    public void openfile(View v)
-    {
-        Intent it = new Intent();
-        it.addCategory(Intent.CATEGORY_OPENABLE);
-        it.setType("*/*");
-        it.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(it, "DEMO"),1001);
-    }
-    public void onActivityResult(int requestCode, int resultCode,
-                                 Intent data) {
-        // TODO Auto-generated method stub
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1001) {
-            currFileURI = data.getData();
-            File fd;
-            try {
-                fd = new File(FileChooser.getPath(this, currFileURI));
-                tojson(fd.getPath());
-                Log.i("Filepath", fd.toString());
-            network ntw = new network();
-            ntw.execute(fd);
-            }
-            catch(Exception e)
-            {
-                Log.i("fd", e.toString());
-            }
-
-        }}
-        private void tojson(String inp)
-        {
-            ArrayList<String> ar = new ArrayList<>();
-            Log.i("Eindoed",inp);
-            ar.add(inp);
-            JSONArray jr = new JSONArray(ar);
-            writetofile(jr.toString());
-        }
-        private void writetofile(String inp)
-        {
-            File folder = Environment.getExternalStorageDirectory();
-            File file = new File(folder,"Music/relayjs.json");
-            file.delete();
-            try {
-                file.createNewFile();
-                FileWriter wr = new FileWriter(file);
-                wr.write("var paths = "+inp);
-                wr.flush();
-                wr.close();
-            }
-            catch (Exception e)
-            {
-                Log.e("writetofile",e.toString());
-            }
-        }
         private void getcurrip()
         {
             ip=Utils.getIPAddress(true);
             Log.i("IPA",ip);
             TextView tv = findViewById(R.id.textView6);
             tv.setText((ip+":53000"));
+        }
+        public void addfileit(View v)
+        {
+            Intent it = new Intent(this,fileselect.class);
+            startActivity(it);
         }
 }
 

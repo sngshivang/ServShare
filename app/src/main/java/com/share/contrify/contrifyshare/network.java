@@ -28,17 +28,16 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 
-public class network extends AsyncTask <File, Void, Void> {
+public class network extends AsyncTask <String, Void, Void> {
 
 
     @Override
-    public Void doInBackground(File... test)
+    public Void doInBackground(String... test)
     {
         class JavaHTTPServer implements Runnable{
 
             final File WEB_ROOT= Environment.getExternalStorageDirectory();
             String DEFAULT_FILE = "/relay";
-            File finpath=null;
             final String FILE_NOT_FOUND = "404.html";
             final String METHOD_NOT_SUPPORTED = "not_supported.html";
             // port to listen connection
@@ -49,25 +48,22 @@ public class network extends AsyncTask <File, Void, Void> {
 
             // Client Connection via Socket Class
             private Socket connect;
-            public JavaHTTPServer(File tdp)
-            {
-                finpath=tdp;
-            }
-            public JavaHTTPServer(Socket c, File tdp) {
+            public JavaHTTPServer(Socket c) {
 
                 connect = c;
-                finpath=tdp;
             }
+            public JavaHTTPServer()
+            {
 
+            }
             public void first() {
                 try {
                     ServerSocket serverConnect = new ServerSocket(PORT);
                     System.out.println("Server started.\nListening for connections on port : " + PORT + " ...\n");
-                    Log.i("Filepath",finpath.getPath());
 
                     // we listen until user halts server execution
                     while (true) {
-                        JavaHTTPServer myServer = new JavaHTTPServer(serverConnect.accept(),finpath);
+                        JavaHTTPServer myServer = new JavaHTTPServer(serverConnect.accept());
 
                         if (verbose) {
                             System.out.println("Connecton opened. (" + new Date() + ")");
@@ -185,7 +181,8 @@ public class network extends AsyncTask <File, Void, Void> {
                         }
                         else
                         {
-                            File file = finpath;
+                            File file = new File(fileRequested);
+                            Log.i("MiscFile",fileRequested);
                             int fileLength = (int) file.length();
                             fis = new FileInputStream(file);
                             int count;
@@ -282,9 +279,8 @@ public class network extends AsyncTask <File, Void, Void> {
             }
 
         }
-        File inpath=test[0];
-        JavaHTTPServer td = new JavaHTTPServer(inpath);
-        td.first();
+        //JavaHTTPServer td = new JavaHTTPServer();
+        new JavaHTTPServer().first();
         return null;
     }
 }
