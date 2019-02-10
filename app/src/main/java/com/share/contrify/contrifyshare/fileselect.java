@@ -2,6 +2,7 @@ package com.share.contrify.contrifyshare;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,21 +25,27 @@ public class fileselect extends AppCompatActivity {
         setContentView(R.layout.activity_fileselect);
         ar = new ArrayList<>();
         arf = new ArrayList<>();
+        ntw = new network();
+        al = new ArrayList<>();
+        lst = findViewById(R.id.filelst);
+        st = new studadap(this,al);
     }
+    network ntw;
     Uri currFileURI;
+    ArrayList<fieldsinfo> al;
     studadap st;
+    fieldsinfo ifo;
     ListView lst;
+    AsyncTask atsk;
     String fname=null,fpath=null,fattr=null;
     ArrayList<String> ar;
     ArrayList<File> arf;
     public void addfile(View v)
     {
-        ArrayList<fieldsinfo> al = new ArrayList<>();
-        lst = findViewById(R.id.filelst);
-        st = new studadap(this,al);
         Intent it = new Intent();
         it.addCategory(Intent.CATEGORY_OPENABLE);
         it.setType("*/*");
+        it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         it.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(it, "DEMO"),1001);
     }
@@ -46,22 +53,26 @@ public class fileselect extends AppCompatActivity {
                                  Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-
+        int cnt=0,ini=0;
         // super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1001) {
-            currFileURI = data.getData();
             File fd;
             try {
-                fd = new File(FileChooser.getPath(this, currFileURI));
-                tojson(fd);
-                String pth = fd.getPath();
-                fname=findnme(pth);
-                fpath=pth;
-                fieldsinfo ifo = new fieldsinfo(fname,"TEST",fpath);
-                st.add(ifo);
-                lst.setAdapter(st);
-                Log.i("Filepath", pth);
+                cnt=data.getClipData().getItemCount();
+                //fd = new File(currFileURI.getPath());
+                for (;ini<cnt;ini++) {
+                    currFileURI = data.getClipData().getItemAt(ini).getUri();
+                    fd = new File(FileChooser.getPath(this, currFileURI));
+                    tojson(fd);
+                    String pth = fd.getPath();
+                    fname = findnme(pth);
+                    fpath = pth;
+                    ifo = new fieldsinfo(fname, "TEST", fpath);
+                    st.add(ifo);
+                    lst.setAdapter(st);
+                    Log.i("Filepath", pth);
+                }
 
             }
             catch(Exception e)
@@ -77,18 +88,32 @@ public class fileselect extends AppCompatActivity {
         ar.add(inp.toString());
 
     }
-    public void svstart(View v)
+    public void ststart(View v)
+    {
+        if (ntw.getStatus()==AsyncTask.Status.RUNNING)
+            stop();
+        else
+            svstart();
+
+    }
+    protected void svstart()
     {
         ImageView iv = findViewById(R.id.imageView7);
         iv.setImageResource(R.drawable.power_vect_on);
         JSONArray jr = new JSONArray(ar);
         writetofile(jr.toString());
-        network ntw = new network();
-        ntw.execute();
-
+        atsk=ntw.execute();
+    }
+    protected void stop()
+    {
+        atsk.cancel(true);
+        ImageView iv = findViewById(R.id.imageView7);
+        if (ntw.getStatus()!=AsyncTask.Status.RUNNING)
+        iv.setImageResource(R.drawable.power_sel);
     }
     private void writetofile(String inp)
     {
+        Log.i("WRITE",inp);
         File folder = Environment.getExternalStorageDirectory();
         File file = new File(folder,"Music/relayjs.json");
         file.delete();

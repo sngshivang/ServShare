@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 
-public class network extends AsyncTask <String, Void, Void> {
+public class network extends AsyncTask <String, Integer, Void> {
 
 
     @Override
@@ -74,7 +74,7 @@ public class network extends AsyncTask <String, Void, Void> {
                         thread.start();
                     }
 
-                } catch (IOException e) {
+                } catch (Exception e) {
                     System.err.println("Server Connection error : " + e.getMessage());
                 }
             }
@@ -214,7 +214,7 @@ public class network extends AsyncTask <String, Void, Void> {
                         System.err.println("Error with file not found exception : " + ioe.getMessage());
                     }
 
-                } catch (IOException ioe) {
+                } catch (Exception ioe) {
                     System.err.println("Server error : " + ioe);
                 } finally {
                     try {
@@ -230,8 +230,17 @@ public class network extends AsyncTask <String, Void, Void> {
                         System.out.println("Connection closed.\n");
                     }
                 }
-
-
+            }
+            protected void forcestop(BufferedReader br, PrintWriter pw, BufferedOutputStream bos)
+            {
+                   try{
+                       br.close();
+                       pw.close();
+                       bos.close();
+                   }catch (Exception e)
+                   {
+                       Log.e("network","Force stop failed. "+e.toString());
+                   }
             }
             private byte[] readFileData(File file, int fileLength) throws IOException {
                 FileInputStream fileIn = null;
@@ -279,9 +288,13 @@ public class network extends AsyncTask <String, Void, Void> {
             }
 
         }
-        //JavaHTTPServer td = new JavaHTTPServer();
         new JavaHTTPServer().first();
         return null;
     }
+    @Override
+    protected void onProgressUpdate(Integer... val) {
+
+    }
+
 }
 
