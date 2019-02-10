@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -142,5 +143,22 @@ public class fileselect extends AppCompatActivity {
 
         }
         return out;
+    }
+    public void rmfile(View v)
+    {
+        for (fieldsinfo p:st.getBox())
+        {
+            if (p.chkbx)
+            {
+                rmfromalst(p.pos);
+            }
+        }
+    }
+    private void rmfromalst(int pos)
+    {
+        al.remove(pos);
+        ar.remove(pos);
+        st= new studadap(this,al);
+        lst.setAdapter(st);
     }
 }
