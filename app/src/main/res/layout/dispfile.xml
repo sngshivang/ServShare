@@ -18,7 +18,7 @@
         android:layout_toEndOf="@id/checkBox"
         android:layout_marginStart="8dp"
         android:textColor="#75A994"
-        android:textSize="25sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
@@ -30,7 +30,7 @@
         android:lines="3"
         android:marqueeRepeatLimit="marquee_forever"
         android:textColor="#3D8629"
-        android:textSize="15sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/fileattr"
@@ -42,6 +42,6 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:textAlignment="textEnd"
         android:textColor="#3D8629"
-        android:textSize="15sp" />
+        android:textSize="10sp" />
 
 </RelativeLayout>

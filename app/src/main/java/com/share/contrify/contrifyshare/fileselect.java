@@ -14,8 +14,10 @@ import android.widget.ListView;
 
 import org.json.JSONArray;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class fileselect extends AppCompatActivity {
@@ -117,13 +119,19 @@ public class fileselect extends AppCompatActivity {
         Log.i("WRITE",inp);
         File folder = Environment.getExternalStorageDirectory();
         File file = new File(folder,"Music/relayjs.json");
+        BufferedWriter bw;
+        String wrin = "var paths = "+inp;
         file.delete();
         try {
             file.createNewFile();
-            FileWriter wr = new FileWriter(file);
-            wr.write("var paths = "+inp);
-            wr.flush();
-            wr.close();
+            bw = new BufferedWriter(new FileWriter(file));
+            //FileWriter wr = new FileWriter(file);
+            try {
+                bw.write(wrin);
+            }finally {
+                bw.flush();
+                bw.close();
+            }
         }
         catch (Exception e)
         {

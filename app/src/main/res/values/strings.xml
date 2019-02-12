@@ -12,4 +12,9 @@
     <string name="selfil">S E L E C T    F I L E S</string>
     <string name="fs_but1">ADD FILES</string>
     <string name="fs_but2">REMOVE</string>
+    <string name="nv_hme">Home</string>
+    <string name="nv_set">Settings</string>
+    <string name="nv_abt">About</string>
+    <string name="nvhead1">Welcome</string>
+    <string name="nvhead2">Unused Resource</string>
 </resources>
