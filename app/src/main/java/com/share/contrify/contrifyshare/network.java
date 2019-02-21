@@ -161,7 +161,7 @@ public class network extends AsyncTask <String, Integer, Void> {
                                 System.out.println("File " + fileRequested + " of type " + content + " returned");
                             }
                         }
-                        else if (fileRequested.equals("/relayjs") || fileRequested.equals("/music/relayjs.json"))
+                        else if (isint(fileRequested))
                         {
                             Log.i("REQ",fileRequested);
                             File file = new File(WEB_ROOT,fileRequested);
@@ -230,6 +230,17 @@ public class network extends AsyncTask <String, Integer, Void> {
                         System.out.println("Connection closed.\n");
                     }
                 }
+            }
+            private boolean isint(String inp)
+            {
+                if (inp.length()>20) {
+                    if (inp.substring(1, 21).equals("bootstrap-4.0.0-dist") )
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                    return false;
             }
             protected void forcestop(BufferedReader br, PrintWriter pw, BufferedOutputStream bos)
             {

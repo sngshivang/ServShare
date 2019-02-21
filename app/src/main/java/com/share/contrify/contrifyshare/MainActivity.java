@@ -9,6 +9,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dr = findViewById(R.id.drawer_layout);
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -72,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
         getcurrip();
         //WEB_ROOT = new File("File:///sdcard")
 
+    }
+    DrawerLayout dr;
+        public void opendrawer(View v)
+    {
+        dr.openDrawer(GravityCompat.START);
     }
         private void getcurrip()
         {

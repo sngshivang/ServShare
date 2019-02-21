@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,8 +35,12 @@ public class fileselect extends AppCompatActivity {
         al = new ArrayList<>();
         lst = findViewById(R.id.filelst);
         st = new studadap(this,al);
+        dr = findViewById(R.id.drawer_layout);
+        //nv = findViewById(R.id.nav_view);
     }
     network ntw;
+    DrawerLayout dr;
+    NavigationView nv;
     Uri currFileURI;
     ArrayList<fieldsinfo> al;
     studadap st;
@@ -51,6 +58,10 @@ public class fileselect extends AppCompatActivity {
         it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         it.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(it, "DEMO"),1001);
+    }
+    public void opendrawer(View v)
+    {
+        dr.openDrawer(GravityCompat.START);
     }
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent data) {
@@ -118,7 +129,7 @@ public class fileselect extends AppCompatActivity {
     {
         Log.i("WRITE",inp);
         File folder = Environment.getExternalStorageDirectory();
-        File file = new File(folder,"Music/relayjs.json");
+        File file = new File(folder,"bootstrap-4.0.0-dist/relayjs.json");
         BufferedWriter bw;
         String wrin = "var paths = "+inp;
         file.delete();
