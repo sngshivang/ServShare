@@ -120,10 +120,15 @@ public class fileselect extends AppCompatActivity {
     }
     protected void stop()
     {
+        Log.i("Cancel","CI");
         atsk.cancel(true);
         ImageView iv = findViewById(R.id.imageView7);
         if (ntw.getStatus()!=AsyncTask.Status.RUNNING)
-        iv.setImageResource(R.drawable.power_sel);
+            iv.setImageResource(R.drawable.power_sel);
+    }
+    public void status(View v)
+    {
+        Log.i("SVSTAT",ntw.getStatus().toString());
     }
     private void writetofile(String inp)
     {

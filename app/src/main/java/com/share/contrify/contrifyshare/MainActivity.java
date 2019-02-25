@@ -8,12 +8,14 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dr = findViewById(R.id.drawer_layout);
+        nv = findViewById(R.id.nav_view);
+        navstuff();
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -77,21 +81,48 @@ public class MainActivity extends AppCompatActivity {
 
     }
     DrawerLayout dr;
-        public void opendrawer(View v)
+    NavigationView nv;
+    private void navstuff()
+    {
+        nv.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem mt) {
+                        mt.setChecked(true);
+                        if (mt.getItemId()==R.id.nav_home)
+                        {
+                            Intent it = new Intent(MainActivity.this,MainActivity.class);
+                            startActivity(it);
+                        }
+                        else if (mt.getItemId()==R.id.nav_set)
+                        {
+                            Intent it = new Intent(MainActivity.this,setting.class);
+                            startActivity(it);
+                        }
+                        else if (mt.getItemId()==R.id.nav_about)
+                        {
+                            Intent it = new Intent(MainActivity.this,about.class);
+                            startActivity(it);
+                        }
+                        dr.closeDrawers();
+                        return true;
+                    }
+                });
+    }
+    public void opendrawer(View v)
     {
         dr.openDrawer(GravityCompat.START);
     }
-        private void getcurrip()
-        {
-            ip=Utils.getIPAddress(true);
-            Log.i("IPA",ip);
-            TextView tv = findViewById(R.id.textView6);
-            tv.setText((ip+":53000"));
-        }
-        public void addfileit(View v)
-        {
-            Intent it = new Intent(this,fileselect.class);
-            startActivity(it);
-        }
+    private void getcurrip()
+    {
+        ip=Utils.getIPAddress(true);
+        Log.i("IPA",ip);
+        TextView tv = findViewById(R.id.textView6);
+        tv.setText((ip+":53000"));
+    }
+    public void addfileit(View v)
+    {
+        Intent it = new Intent(this,fileselect.class);
+        startActivity(it);
+    }
 }
-

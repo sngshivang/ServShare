@@ -20,7 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".fileselect"></activity>
+        <activity android:name=".fileselect" />
+        <activity android:name=".setting" />
+        <activity android:name=".about"></activity>
     </application>
 
 </manifest>

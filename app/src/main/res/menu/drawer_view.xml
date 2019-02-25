@@ -9,7 +9,7 @@
             android:title="@string/nv_set" />
         <item
             android:id="@+id/nav_about"
-            android:title="@string/nv_set" />
+            android:title="@string/nv_abt" />
 
     </group>
 </menu>
