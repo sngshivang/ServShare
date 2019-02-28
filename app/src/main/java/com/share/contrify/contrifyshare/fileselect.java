@@ -37,6 +37,7 @@ public class fileselect extends AppCompatActivity {
         al = new ArrayList<>();
         iv = findViewById(R.id.imageView7);
         lst = findViewById(R.id.filelst);
+        lst.setEmptyView(findViewById(R.id.empty_list_view));
         st = new studadap(this,al);
         dr = findViewById(R.id.drawer_layout);
         //nv = findViewById(R.id.nav_view);

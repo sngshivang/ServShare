@@ -30,4 +30,5 @@
     <string name="abtus_cp3">NETWORK INTERFERENCE: This software accepts connection on Port 53000 (Default) on the TCP/IP. This is an unreserved port so please ensure that this port isn\'t blocked or in use by other application or server. If it doesn\'t help, consider changing the port in the Settings.</string>
     <string name="abtus_git">This project is available on GitHub</string>
     <string name="git_msft">GitHub is a registered trademark of Microsoft Corporation. \u00A9 Microsoft Corporation. All rights reserved.</string>
+    <string name="empt_lv">Add files in the list to share</string>
 </resources>

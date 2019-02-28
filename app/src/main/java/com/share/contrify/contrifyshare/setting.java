@@ -64,4 +64,12 @@ public class setting extends AppCompatActivity {
         else
             iv.setImageResource(R.drawable.power_sel);
     }
+    public void svstart(View v)
+    {
+        if (sv_module.getstat())
+            iv.setImageResource(R.drawable.power_sel);
+        else
+            iv.setImageResource(R.drawable.power_sel_on);
+        sv_module.ststart();
+    }
 }

@@ -142,4 +142,12 @@ public class MainActivity extends AppCompatActivity {
         Intent it = new Intent(this,fileselect.class);
         startActivity(it);
     }
+    public void svstart(View v)
+    {
+        if (sv_module.getstat())
+            iv.setImageResource(R.drawable.power_sel);
+        else
+            iv.setImageResource(R.drawable.power_sel_on);
+        sv_module.ststart();
+    }
 }

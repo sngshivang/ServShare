@@ -198,6 +198,7 @@
         android:layout_height="42dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
+        android:onClick="svstart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/power_vect"

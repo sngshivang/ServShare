@@ -64,45 +64,44 @@
     <Button
         android:id="@+id/addfile"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:textSize="12sp"
+        android:layout_marginBottom="12dp"
+        android:textSize="14sp"
         android:onClick="addfile"
-        android:padding="5dp"
         android:text="@string/fs_but1"
+        android:textColor="@android:color/white"
         android:background="@drawable/buttons"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filelst" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    <Button
-        android:id="@+id/rmfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textSize="12sp"
-        android:onClick="rmfile"
-        android:padding="5dp"
-        android:text="@string/fs_but2"
-        android:background="@drawable/buttons"
-        app:layout_constraintStart_toEndOf="@id/addfile"
-        app:layout_constraintTop_toBottomOf="@id/filelst" />
+        <Button
+            android:id="@+id/rmfile"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/buttons"
+            android:onClick="rmfile"
+            android:text="@string/fs_but2"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/addfile" />
 
         <Button
             android:id="@+id/test"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:textSize="12sp"
+            android:layout_marginBottom="12dp"
+            android:textSize="14sp"
             android:onClick="testbut"
-            android:padding="5dp"
             android:text="@string/fs_but2"
+            android:textColor="@android:color/white"
             android:background="@drawable/buttons"
             app:layout_constraintStart_toEndOf="@id/rmfile"
-            app:layout_constraintTop_toBottomOf="@id/filelst" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     <ListView
         android:id="@+id/filelst"
@@ -112,6 +111,17 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView1" />
+
+        <TextView
+            android:id="@+id/empty_list_view"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView1"
+            android:text="@string/empt_lv"
+            android:visibility="gone" />
 
 
     </android.support.constraint.ConstraintLayout>

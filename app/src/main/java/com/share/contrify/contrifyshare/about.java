@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 public class about extends AppCompatActivity {
@@ -59,6 +60,14 @@ public class about extends AppCompatActivity {
             iv.setImageResource(R.drawable.power_sel_on);
         else
             iv.setImageResource(R.drawable.power_sel);
+    }
+    public void svstart(View v)
+    {
+        if (sv_module.getstat())
+            iv.setImageResource(R.drawable.power_sel);
+        else
+            iv.setImageResource(R.drawable.power_sel_on);
+        sv_module.ststart();
     }
     DrawerLayout dr;
     ImageView iv;
