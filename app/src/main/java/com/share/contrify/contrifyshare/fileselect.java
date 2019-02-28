@@ -1,5 +1,6 @@
 package com.share.contrify.contrifyshare;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,6 +22,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class fileselect extends AppCompatActivity {
@@ -31,33 +34,47 @@ public class fileselect extends AppCompatActivity {
         setContentView(R.layout.activity_fileselect);
         ar = new ArrayList<>();
         arf = new ArrayList<>();
-        ntw = new network();
         al = new ArrayList<>();
+        iv = findViewById(R.id.imageView7);
         lst = findViewById(R.id.filelst);
         st = new studadap(this,al);
         dr = findViewById(R.id.drawer_layout);
         //nv = findViewById(R.id.nav_view);
     }
-    network ntw;
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        modimg();
+
+    }
+    private void modimg()
+    {
+        System.out.println("Called it!");
+        if (sv_module.getstat())
+            iv.setImageResource(R.drawable.power_sel_on);
+        else
+            iv.setImageResource(R.drawable.power_sel);
+    }
     DrawerLayout dr;
     NavigationView nv;
     Uri currFileURI;
+    ImageView iv;
     ArrayList<fieldsinfo> al;
     studadap st;
     fieldsinfo ifo;
     ListView lst;
-    AsyncTask atsk;
     String fname=null,fpath=null,fattr=null;
     ArrayList<String> ar;
     ArrayList<File> arf;
     public void addfile(View v)
     {
         Intent it = new Intent();
-        it.addCategory(Intent.CATEGORY_OPENABLE);
         it.setType("*/*");
+        it.addCategory(Intent.CATEGORY_OPENABLE);
         it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         it.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(it, "DEMO"),1001);
+        startActivityForResult(Intent.createChooser(it,"TEST"),1001);
     }
     public void opendrawer(View v)
     {
@@ -66,32 +83,51 @@ public class fileselect extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent data) {
         // TODO Auto-generated method stub
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode,data);
         int cnt=0,ini=0;
-        // super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1001) {
-            File fd;
-            try {
-                cnt=data.getClipData().getItemCount();
-                //fd = new File(currFileURI.getPath());
-                for (;ini<cnt;ini++) {
-                    currFileURI = data.getClipData().getItemAt(ini).getUri();
-                    fd = new File(FileChooser.getPath(this, currFileURI));
-                    tojson(fd);
-                    String pth = fd.getPath();
-                    fname = findnme(pth);
-                    fpath = pth;
-                    ifo = new fieldsinfo(fname, "TEST", fpath);
-                    st.add(ifo);
-                    lst.setAdapter(st);
-                    Log.i("Filepath", pth);
-                }
-
-            }
-            catch(Exception e)
+        if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
             {
-                Log.i("fd", e.toString());
+                if (data.getClipData() != null) {
+
+                    File fd;
+                    try {
+                        cnt = data.getClipData().getItemCount();
+                        //fd = new File(currFileURI.getPath());
+                        for (; ini < cnt; ini++) {
+                            currFileURI = data.getClipData().getItemAt(ini).getUri();
+                            fd = new File(FileChooser.getPath(this, currFileURI));
+                            tojson(fd);
+                            String pth = fd.getPath();
+                            fname = findnme(pth);
+                            fpath = pth;
+                            ifo = new fieldsinfo(fname, "TEST", fpath);
+                            st.add(ifo);
+                            lst.setAdapter(st);
+                        }
+
+                    } catch (Exception e) {
+                        Log.i("fd", e.toString());
+                    }
+                }
+                else if (data.getData()!=null)
+                {
+                    File fd;
+                    try{
+                        currFileURI=data.getData();
+                        fd = new File(FileChooser.getPath(this,currFileURI));
+                        tojson(fd);
+                        String pth = fd.getPath();
+                        fname = findnme(pth);
+                        fpath = pth;
+                        ifo = new fieldsinfo(fname, "TEST", fpath);
+                        st.add(ifo);
+                        lst.setAdapter(st);
+
+                    }
+                    catch (Exception e) {
+                        Log.i("File Browser Intent", e.toString());
+                    }
+                }
             }
 
         }}
@@ -100,37 +136,18 @@ public class fileselect extends AppCompatActivity {
         arf.add(inp);
         Log.i("Eindoed",inp.getPath());
         ar.add(inp.toString());
-
-    }
-    public void ststart(View v)
-    {
-        if (ntw.getStatus()==AsyncTask.Status.RUNNING)
-            stop();
-        else
-            svstart();
-
-    }
-    protected void svstart()
-    {
-        ImageView iv = findViewById(R.id.imageView7);
-        iv.setImageResource(R.drawable.power_vect_on);
         JSONArray jr = new JSONArray(ar);
         writetofile(jr.toString());
-        atsk=ntw.execute();
     }
-    protected void stop()
+    public void svstart(View v)
     {
-        Log.i("Cancel","CI");
-        atsk.cancel(true);
-        ImageView iv = findViewById(R.id.imageView7);
-        if (ntw.getStatus()!=AsyncTask.Status.RUNNING)
+        if (sv_module.getstat())
             iv.setImageResource(R.drawable.power_sel);
+        else
+            iv.setImageResource(R.drawable.power_sel_on);
+        sv_module.ststart();
     }
-    public void status(View v)
-    {
-        Log.i("SVSTAT",ntw.getStatus().toString());
-    }
-    private void writetofile(String inp)
+    protected void writetofile(String inp)
     {
         Log.i("WRITE",inp);
         File folder = Environment.getExternalStorageDirectory();

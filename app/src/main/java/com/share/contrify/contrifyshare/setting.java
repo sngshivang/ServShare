@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 public class setting extends AppCompatActivity {
 
@@ -17,9 +18,11 @@ public class setting extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         dr = findViewById(R.id.drawer_layout);
         nv = findViewById(R.id.nav_view);
+        iv = findViewById(R.id.imageView7);
         navstuff();
     }
     DrawerLayout dr;
+    ImageView iv;
     NavigationView nv;
     private void navstuff()
     {
@@ -46,5 +49,19 @@ public class setting extends AppCompatActivity {
     public void opendrawer(View v)
     {
         dr.openDrawer(GravityCompat.START);
+    }
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        modimg();
+
+    }
+    private void modimg()
+    {
+        if (sv_module.getstat())
+            iv.setImageResource(R.drawable.power_sel_on);
+        else
+            iv.setImageResource(R.drawable.power_sel);
     }
 }

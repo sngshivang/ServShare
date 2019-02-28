@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -41,6 +42,7 @@ import java.util.StringTokenizer;
 public class MainActivity extends AppCompatActivity {
 
     int perval = 1;
+    ImageView iv;
     public String ip;
 
     @Override
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         //DEFAULT_FILE = "android.resource://" + this.getPackageName() + "/raw/rewind_results"; //+ R.raw.rewind_results;
         //DEFAULT_FILE=Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.rewind_results).toString();
         //DEFAULT_FILE="file:///sdcard/rewind_results.html";
+        iv = findViewById(R.id.imageView7);
         getcurrip();
         //WEB_ROOT = new File("File:///sdcard")
 
@@ -113,12 +116,26 @@ public class MainActivity extends AppCompatActivity {
     {
         dr.openDrawer(GravityCompat.START);
     }
-    private void getcurrip()
+    protected void getcurrip()
     {
         ip=Utils.getIPAddress(true);
         Log.i("IPA",ip);
         TextView tv = findViewById(R.id.textView6);
         tv.setText((ip+":53000"));
+    }
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        modimg();
+
+    }
+    private void modimg()
+    {
+        if (sv_module.getstat())
+            iv.setImageResource(R.drawable.power_sel_on);
+        else
+            iv.setImageResource(R.drawable.power_sel);
     }
     public void addfileit(View v)
     {
