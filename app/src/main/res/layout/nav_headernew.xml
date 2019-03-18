@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:padding="16dp"
-    android:background="@color/colorAccent">
+    android:background="@android:color/transparent">
 
     <TextView
         android:id="@+id/textView4"
@@ -15,7 +15,6 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/calibri"
-        android:text="@string/nvhead1"
         android:textColor="@android:color/white"
         android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +27,6 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/calibri"
-        android:text="@string/nvhead2"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

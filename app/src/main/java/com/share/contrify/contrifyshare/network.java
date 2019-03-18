@@ -9,12 +9,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,6 +29,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -41,6 +46,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
             final File WEB_ROOT= Environment.getExternalStorageDirectory();
             String DEFAULT_FILE = "/relay";
             boolean rnr=true;
+            private String bound="";
             final String FILE_NOT_FOUND = "404.html";
             ServerSocket serverConnect;
             final String METHOD_NOT_SUPPORTED = "not_supported.html";
@@ -97,8 +103,11 @@ public class network extends AsyncTask <Socket, Integer, Void> {
             public void run() {
                 // we manage our particular client connection
                 BufferedReader in = null; PrintWriter out = null; BufferedOutputStream dataOut = null;
+                BufferedInputStream bfis=null;
+                FileOutputStream fos2=null;
+                byte b[],bt2[],bt3[];
                 BufferedWriter tout=null;
-                String fileRequested = null;
+                String fileRequested = "";
                 Log.i("FLOW","RUN");
                 byte[] buffer = new byte[8192];
                 FileInputStream fis=null;
@@ -108,8 +117,8 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                         Log.i("FLOW", "ISCAN2");
                         rnr=false;
                         try {
-                            in.close();
                             out.close();
+                            bfis.close();
                             dataOut.close();
                             connect.close();
                             serverConnect.close();// we close socket connection
@@ -122,25 +131,122 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                         //Thread.sleep(1000);
                     } else {
                         // we read characters from the client via input stream on the socket
-                        in = new BufferedReader(new InputStreamReader(connect.getInputStream()));
+                        bfis=new BufferedInputStream(connect.getInputStream());
+                        b= new byte[1024];bt2= new byte[1024]; bt3 = new byte[1024];
+                        //in = new BufferedReader(new InputStreamReader(connect.getInputStream()));
+                        fos2 = new FileOutputStream(new File(WEB_ROOT,"google.txt"));
                         // we get character output stream to client (for headers)
                         out = new PrintWriter(connect.getOutputStream());
+                        String method="";
                         // get binary output stream to client (for requested data)
                         dataOut = new BufferedOutputStream(connect.getOutputStream());
                         tout = new BufferedWriter(out);
+                        int i=0,temp=0,j=3,lbc=0,ofc,off=0,b1=0,b2=0; boolean trip= true;
+                        for (int readNum; (readNum = bfis.read(b)) != -1;)
+                        {
+                            int s=0;
+                            if (i==0) {
+                                while (b[s]!=32) {
+                                    method+=(char)b[s];
+                                    s++;
+                                }
+                                s++;
+                                while (b[s]!=32) {
+                                    fileRequested+=(char)b[s];
+                                    s++;
+                                }
+                                System.out.println("Method: "+method);
+                                System.out.println("File "+fileRequested);
+                            }
+                            if (method.equals("POST")||i!=0) {
+                                off =readNum;
+                                if (trip)
+                                {
+                                    bound=boundary(b);
+                                }
+                                for (j=0;j<1024&&trip;j++)
+                                {
+                                    if (lbc<18)
+                                    {
+                                        if (b[j]==13)
+                                            lbc++;
+                                    }
+                                    else
+                                    {
+                                        temp=j+1;
+                                        trip=false;
+                                        for (int z=0;z<temp;z++)
+                                            b[z]=0;
+                                        break;
+                                    }
+                                }
+                                if (!trip) {
+                                    if(i==2){
+                                        fos2.write(bt3,temp,Math.abs(1024-temp));
+                                    }else if (i>2){
+                                        fos2.write(bt3,0,1024);
+                                    }
+                                    fos2.flush();
+                                    bt3 = bt2.clone();
+                                    bt2 = b.clone();
+                                    i++;
+
+                                    if (readEnd(bt3,bt2,0)!=-1)
+                                    {
+                                        if (i<2)
+                                        {
+                                            byte[] nbt = new byte[1024];
+                                            off = readEnd(b,nbt,temp);
+                                            fos2.write(b,temp,Math.abs(off-2-temp));
+                                        }
+                                        else if (i==2)
+                                        {
+                                            off = readEnd(bt3,bt2,temp);
+                                            if (off<=1024)
+                                                fos2.write(bt3,temp,off-2);
+                                            else
+                                            {
+                                                fos2.write(bt3, temp , 1024);
+                                                fos2.write(bt2, 0, off-1024-2);
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            off = readEnd(bt3,bt2,0);
+                                            System.out.println("BEYOFF "+off);
+                                            if (off<=1024)
+                                                fos2.write(bt3,0,off-2);
+                                            else
+                                            {
+                                                fos2.write(bt3, 0 , 1024);
+                                                fos2.write(bt2, 0, (off-1024)-2);
+                                            }
+
+                                        }
+                                        break;
+                                    }
+
+                                }
+                            }
+                            else break;
+                        }
+                        //String input = in.readLine();
+                        System.out.println(method);
+                        System.out.println(fileRequested);
 
                         // get first line of the request from the client
-                        String input = in.readLine();
+                        //String input = in.readLine();
                         //Log.i("input",input);
                         // we parse the request with a string tokenizer
-                        StringTokenizer parse = new StringTokenizer(input);
-                        String method = parse.nextToken().toUpperCase(); // we get the HTTP method of the client
+                        //StringTokenizer parse = new StringTokenizer(input);
+                        //String method = parse.nextToken().toUpperCase(); // we get the HTTP method of the client
                         // we get file requested
-                        fileRequested = parse.nextToken().toLowerCase();
+                        //fileRequested = parse.nextToken().toLowerCase();
                         Log.i("filereg", fileRequested);
 
                         // we support only GET and HEAD methods, we check
-                        if (!method.equals("GET") && !method.equals("HEAD")) {
+                        if (!method.equals("GET") && !method.equals("POST")) {
                             if (verbose) {
                                 System.out.println("501 Not Implemented : " + method + " method.");
                             }
@@ -164,7 +270,48 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                             dataOut.write(fileData, 0, fileLength);
                             dataOut.flush();
 
-                        } else {
+                        }
+                        else if (method.equals("POST"))
+                        {
+                            Log.i("POST","Hey post request");
+                            try {
+                                DataInputStream dis = new DataInputStream(new BufferedInputStream(connect.getInputStream()));
+                                DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(connect.getOutputStream()));
+//read the number of files from the client
+                                int number = dis.readInt();
+                                ArrayList<File> files = new ArrayList<>(number);
+                                System.out.println("Number of Files to be received: " +number);
+                                //read file names, add files to arraylist
+                                for(i = 0; i< number;i++){
+                                    File file = new File(dis.readUTF());
+                                    files.add(file);
+                                }
+                                int n = 0;
+                                byte[]buf = new byte[4092];
+
+                                //outer loop, executes one for each file
+                                for(i = 0; i < files.size();i++){
+
+                                    System.out.println("Receiving file: " + files.get(i).getName());
+                                    //create a new fileoutputstream for each new file
+                                    FileOutputStream fos = new FileOutputStream(WEB_ROOT.getPath()+files.get(i).getName());
+                                    //read file
+                                    String line;
+                                    while((line = in.readLine()) != null){
+                                        fos.write(buf,0,n);
+                                        fos.flush();
+                                    }
+                                    fos.close();
+                                }
+
+                            } catch (Exception e) {
+                                // TODO Auto-generated catch block
+                                Log.e("POST",e.toString());
+
+                            }
+                        }
+                        else
+                         {
                             // GET or HEAD method
                             if (fileRequested.endsWith("/")) {
                                 fileRequested += DEFAULT_FILE;
@@ -245,7 +392,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                         System.err.println("Server error : " + ioe);
                     } finally{
                         try {
-                            in.close();
+                            bfis.close();
                             out.close();
                             dataOut.close();
                             connect.close(); // we close socket connection
@@ -336,6 +483,112 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                 if (verbose) {
                     System.out.println("File " + fileRequested + " not found");
                 }
+            }
+            private int readEnd(byte[] ba, byte[] bb,  int j)
+            {
+                int i;
+                for (i=0;i<j;i++)
+                    ba[i]=0;
+                byte[] bc = new byte[2048];
+                for (i=0;i<1024;i++)
+                    bc[i] = ba[i];
+                for (i=1024;i<2048;i++)
+                    bc[i] = bb[i-1024];
+                int fnd = KMPSearch(bound,bc);
+                return fnd;
+
+            }
+            private String cntlnt(byte[] b)
+            {
+                int fnd = KMPSearch("Content-Length:",b);
+                String out = "";
+                for (int i=fnd+16;b[i]!=13;i++)
+                    out=out+b[i];
+                return out;
+            }
+            int KMPSearch(String pat, byte[] txt)
+            {
+                int M = pat.length(),fnd=-1;
+                int N = 2048;
+                int lps[] = new int[M];
+                int j = 0; // index for pat[]
+                computeLPSArray(pat, M, lps);
+
+                int i = 0; // index for txt[]
+                while (i < N) {
+                    if (pat.charAt(j) == (char)txt[i]) {
+                        j++;
+                        i++;
+                    }
+                    if (j == M) {
+                        fnd = i-j;
+                        j = lps[j - 1];
+                        break;
+                    }
+
+                    // mismatch after j matches
+                    else if (i < N && pat.charAt(j) != (char)txt[i]) {
+                        if (j != 0)
+                            j = lps[j - 1];
+                        else
+                            i = i + 1;
+                    }
+                }
+                return fnd;
+            }
+            //private void finalise(int i,)
+            void computeLPSArray(String pat, int M, int lps[])
+            {
+                // length of the previous longest prefix suffix
+                int len = 0;
+                int i = 1;
+                lps[0] = 0; // lps[0] is always 0
+
+                // the loop calculates lps[i] for i = 1 to M-1
+                while (i < M) {
+                    if (pat.charAt(i) == pat.charAt(len)) {
+                        len++;
+                        lps[i] = len;
+                        i++;
+                    }
+                    else // (pat[i] != pat[len])
+                    {
+                        // This is tricky. Consider the example.
+                        // AAACAAAA and i = 7. The idea is similar
+                        // to search step.
+                        if (len != 0) {
+                            len = lps[len - 1];
+
+                            // Also, note that we do not increment
+                            // i here
+                        }
+                        else // if (len == 0)
+                        {
+                            lps[i] = len;
+                            i++;
+                        }
+                    }
+                }
+            }
+            private String boundary(byte[] b)
+            {
+                int j;
+                String bstr="";
+                for (j=0;j<1020;j++)
+                {
+                    if (b[j]=='-'&&b[j+1]=='-'&&b[j+2]=='-')
+                    {
+                        while (b[j]!=13)
+                        {
+                            bstr=bstr+(char)b[j];
+                            j++;
+                        }
+                        break;
+
+                    }
+                }
+                bstr = "--"+bstr;
+                return bstr;
             }
         }
         boolean tsr=true;

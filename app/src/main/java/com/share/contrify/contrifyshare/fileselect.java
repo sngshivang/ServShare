@@ -2,6 +2,7 @@ package com.share.contrify.contrifyshare;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 
@@ -32,12 +34,12 @@ public class fileselect extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fileselect);
-        ar = new ArrayList<>();
         arf = new ArrayList<>();
-        al = new ArrayList<>();
         iv = findViewById(R.id.imageView7);
         lst = findViewById(R.id.filelst);
-        lst.setEmptyView(findViewById(R.id.empty_list_view));
+        svs_tv = findViewById(R.id.svst_wr);
+        lst.setEmptyView(findViewById(R.id.elv));
+        lst.setEmptyView(findViewById(R.id.elv2));
         st = new studadap(this,al);
         dr = findViewById(R.id.drawer_layout);
         //nv = findViewById(R.id.nav_view);
@@ -47,26 +49,35 @@ public class fileselect extends AppCompatActivity {
     {
         super.onResume();
         modimg();
+        lst = findViewById(R.id.filelst);
+        st = new studadap(this,al);
+        lst.setAdapter(st);
 
     }
     private void modimg()
     {
-        System.out.println("Called it!");
-        if (sv_module.getstat())
+        if (sv_module.getstat()) {
             iv.setImageResource(R.drawable.power_sel_on);
-        else
+            svs_tv.setText(R.string.svst_wr1);
+            svs_tv.setTextColor(Color.parseColor("#02F424"));
+        }
+        else{
             iv.setImageResource(R.drawable.power_sel);
+            svs_tv.setText(R.string.svst_wr2);
+            svs_tv.setTextColor(Color.parseColor("#FF0000"));
+        }
     }
     DrawerLayout dr;
     NavigationView nv;
     Uri currFileURI;
+    TextView svs_tv;
     ImageView iv;
-    ArrayList<fieldsinfo> al;
+    static ArrayList<fieldsinfo> al = new ArrayList<>();
     studadap st;
     fieldsinfo ifo;
     ListView lst;
     String fname=null,fpath=null,fattr=null;
-    ArrayList<String> ar;
+    static ArrayList<String> ar = new ArrayList<>();
     ArrayList<File> arf;
     public void addfile(View v)
     {
@@ -142,10 +153,16 @@ public class fileselect extends AppCompatActivity {
     }
     public void svstart(View v)
     {
-        if (sv_module.getstat())
+        if (sv_module.getstat()){
             iv.setImageResource(R.drawable.power_sel);
-        else
+            svs_tv.setText(R.string.svst_wr2);
+            svs_tv.setTextColor(Color.parseColor("#FF0000"));
+        }
+        else{
             iv.setImageResource(R.drawable.power_sel_on);
+            svs_tv.setText(R.string.svst_wr1);
+            svs_tv.setTextColor(Color.parseColor("#02F424"));
+        }
         sv_module.ststart();
     }
     protected void writetofile(String inp)
@@ -202,5 +219,13 @@ public class fileselect extends AppCompatActivity {
         ar.remove(pos);
         st= new studadap(this,al);
         lst.setAdapter(st);
+        JSONArray jr = new JSONArray(ar);
+        writetofile(jr.toString());
+    }
+    public void getip(View v) {
+        AlertDialog.Builder arb = new AlertDialog.Builder(this);
+        arb.setTitle("IP Address");
+        arb.setMessage(Utils.getIPAddress(true));
+        arb.show();
     }
 }

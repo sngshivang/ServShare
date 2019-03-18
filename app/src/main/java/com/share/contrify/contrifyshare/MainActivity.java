@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         dr = findViewById(R.id.drawer_layout);
         nv = findViewById(R.id.nav_view);
+        svs_tv = findViewById(R.id.svst_wr);
         navstuff();
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -85,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     }
     DrawerLayout dr;
     NavigationView nv;
+    TextView svs_tv;
     private void navstuff()
     {
         nv.setNavigationItemSelectedListener(
@@ -132,10 +135,16 @@ public class MainActivity extends AppCompatActivity {
     }
     private void modimg()
     {
-        if (sv_module.getstat())
+        if (sv_module.getstat()) {
             iv.setImageResource(R.drawable.power_sel_on);
-        else
+            svs_tv.setText(R.string.svst_wr1);
+            svs_tv.setTextColor(Color.parseColor("#02F424"));
+        }
+        else{
             iv.setImageResource(R.drawable.power_sel);
+            svs_tv.setText(R.string.svst_wr2);
+            svs_tv.setTextColor(Color.parseColor("#FF0000"));
+        }
     }
     public void addfileit(View v)
     {
@@ -144,10 +153,16 @@ public class MainActivity extends AppCompatActivity {
     }
     public void svstart(View v)
     {
-        if (sv_module.getstat())
+        if (sv_module.getstat()){
             iv.setImageResource(R.drawable.power_sel);
-        else
+            svs_tv.setText(R.string.svst_wr2);
+            svs_tv.setTextColor(Color.parseColor("#FF0000"));
+        }
+        else{
             iv.setImageResource(R.drawable.power_sel_on);
+            svs_tv.setText(R.string.svst_wr1);
+            svs_tv.setTextColor(Color.parseColor("#02F424"));
+        }
         sv_module.ststart();
     }
 }

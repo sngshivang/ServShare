@@ -47,19 +47,32 @@
         app:srcCompat="@drawable/power_sel"
         android:contentDescription="@string/ctd_steps"/>
 
+        <TextView
+            android:id="@+id/svst_wr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/svst_wr"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="250sp"
         android:layout_height="28dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/calibri"
         android:text="@string/selfil"
         android:textColor="@android:color/black"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/svst_wr" />
 
     <Button
         android:id="@+id/addfile"
@@ -96,7 +109,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="12dp"
             android:textSize="14sp"
-            android:onClick="testbut"
+            android:onClick="getip"
             android:text="@string/fs_but2"
             android:textColor="@android:color/white"
             android:background="@drawable/buttons"
@@ -113,13 +126,26 @@
         app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
         <TextView
-            android:id="@+id/empty_list_view"
+            android:id="@+id/elv2"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
+            android:textColor="@android:color/holo_purple"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView1"
+            android:text="@string/empt_lv1"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/elv"
             android:layout_width="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView1"
+            app:layout_constraintTop_toBottomOf="@+id/elv2"
             android:text="@string/empt_lv"
             android:visibility="gone" />
 
@@ -133,8 +159,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/drawer_view"
-        app:itemTextColor="@android:color/white"
         app:headerLayout="@layout/nav_headernew"
+        app:itemTextColor="@android:color/holo_purple"
         android:background="@drawable/drawer_back1">
 
 

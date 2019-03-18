@@ -8,10 +8,15 @@
     android:fitsSystemWindows="true"
     android:background="@drawable/backimg">
 
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content" >
 
     <ImageView
         android:id="@+id/imageView2"
@@ -40,39 +45,54 @@
         android:layout_width="41dp"
         android:layout_height="52dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="2dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/svst_wr"
         app:srcCompat="@drawable/steps_1"
         android:contentDescription="@string/ctd_steps" />
+
+        <TextView
+            android:id="@+id/svst_wr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/svst_wr"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="300sp"
         android:layout_height="53dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/calibri"
         android:text="@string/step_1_txt"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/svst_wr" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="360sp"
-        android:layout_height="40dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/calibri"
-        android:text="@string/step_1_desp"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/step_1_desp"
+            android:textColor="#8c8888"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -100,19 +120,21 @@
         app:layout_constraintStart_toEndOf="@+id/imageView4"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="360sp"
-        android:layout_height="23dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/calibri"
-        android:text="@string/step_2_desp"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/step_2_desp"
+            android:textColor="#8c8888"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -142,13 +164,13 @@
     <TextView
         android:id="@+id/textView6"
         android:layout_width="360sp"
-        android:layout_height="22dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/calibri"
         android:text="@string/step_3_desp"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
+        android:textColor="#e33641"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
@@ -172,25 +194,28 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/calibri"
         android:text="@string/step_4_txt"
+        android:paddingTop="13dp"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="360sp"
-        android:layout_height="22dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/calibri"
-        android:text="@string/step_4_desp"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/step_4_desp"
+            android:textColor="#8c8888"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
     <ImageView
         android:id="@+id/imageView7"
@@ -205,6 +230,7 @@
         android:contentDescription="@string/ctd_steps"/>
 
 </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -213,7 +239,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/drawer_view"
-        app:itemTextColor="@android:color/white"
+        app:itemTextColor="@android:color/holo_purple"
         app:headerLayout="@layout/nav_headernew"
         android:background="@drawable/drawer_back1">
 

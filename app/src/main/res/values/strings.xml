@@ -31,4 +31,9 @@
     <string name="abtus_git">This project is available on GitHub</string>
     <string name="git_msft">GitHub is a registered trademark of Microsoft Corporation. \u00A9 Microsoft Corporation. All rights reserved.</string>
     <string name="empt_lv">Add files in the list to share</string>
+    <string name="empt_lv1">It is lonely in here!</string>
+    <string name="svst_wr">SERVER STATUS UNKNOWN</string>
+    <string name="svst_wr1">SERVER IS RUNNING</string>
+    <string name="svst_wr2">SERVER HAS STOPPED</string>
+
 </resources>
