@@ -123,13 +123,14 @@ public class MainActivity extends AppCompatActivity {
     {
         ip=Utils.getIPAddress(true);
         Log.i("IPA",ip);
-        TextView tv = findViewById(R.id.textView6);
-        tv.setText((ip+":53000"));
+        TextView tv = findViewById(R.id.textView8);
+        tv.setText((ip+":"+universals.port));
     }
     @Override
     protected void onResume()
     {
         super.onResume();
+        getcurrip();
         modimg();
 
     }

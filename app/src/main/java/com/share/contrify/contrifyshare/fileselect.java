@@ -38,11 +38,9 @@ public class fileselect extends AppCompatActivity {
         iv = findViewById(R.id.imageView7);
         lst = findViewById(R.id.filelst);
         svs_tv = findViewById(R.id.svst_wr);
-        lst.setEmptyView(findViewById(R.id.elv));
         lst.setEmptyView(findViewById(R.id.elv2));
         st = new studadap(this,al);
         dr = findViewById(R.id.drawer_layout);
-        //nv = findViewById(R.id.nav_view);
     }
     @Override
     protected void onResume()
@@ -86,7 +84,7 @@ public class fileselect extends AppCompatActivity {
         it.addCategory(Intent.CATEGORY_OPENABLE);
         it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         it.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(it,"TEST"),1001);
+        startActivityForResult(Intent.createChooser(it,""),1001);
     }
     public void opendrawer(View v)
     {
@@ -112,7 +110,7 @@ public class fileselect extends AppCompatActivity {
                             String pth = fd.getPath();
                             fname = findnme(pth);
                             fpath = pth;
-                            ifo = new fieldsinfo(fname, "TEST", fpath);
+                            ifo = new fieldsinfo(fname, "", fpath);
                             st.add(ifo);
                             lst.setAdapter(st);
                         }
@@ -131,7 +129,7 @@ public class fileselect extends AppCompatActivity {
                         String pth = fd.getPath();
                         fname = findnme(pth);
                         fpath = pth;
-                        ifo = new fieldsinfo(fname, "TEST", fpath);
+                        ifo = new fieldsinfo(fname, "", fpath);
                         st.add(ifo);
                         lst.setAdapter(st);
 
@@ -169,7 +167,7 @@ public class fileselect extends AppCompatActivity {
     {
         Log.i("WRITE",inp);
         File folder = Environment.getExternalStorageDirectory();
-        File file = new File(folder,"bootstrap-4.0.0-dist/relayjs.json");
+        File file = new File(folder,"servshare_data/relayjs.json");
         BufferedWriter bw;
         String wrin = "var paths = "+inp;
         file.delete();

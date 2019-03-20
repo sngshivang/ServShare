@@ -44,14 +44,14 @@ public class network extends AsyncTask <Socket, Integer, Void> {
         class JavaHTTPServer implements Runnable{
 
             final File WEB_ROOT= Environment.getExternalStorageDirectory();
-            String DEFAULT_FILE = "/relay";
+            String DEFAULT_FILE = "/servshare_main.html";
             boolean rnr=true;
             private String bound="";
             final String FILE_NOT_FOUND = "404.html";
             ServerSocket serverConnect;
             final String METHOD_NOT_SUPPORTED = "not_supported.html";
             // port to listen connection
-            final int PORT = 53000;
+            final int PORT = universals.port;
 
             // verbose mode
             final boolean verbose = true;
@@ -311,7 +311,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                             }
                         }
                         else
-                         {
+                        {
                             // GET or HEAD method
                             if (fileRequested.endsWith("/")) {
                                 fileRequested += DEFAULT_FILE;
@@ -381,36 +381,36 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                         }
                     }
 
-                    } catch(FileNotFoundException fnfe){
-                        try {
-                            fileNotFound(out, dataOut, fileRequested);
-                        } catch (IOException ioe) {
-                            System.err.println("Error with file not found exception : " + ioe.getMessage());
-                        }
-
-                    } catch(Exception ioe){
-                        System.err.println("Server error : " + ioe);
-                    } finally{
-                        try {
-                            bfis.close();
-                            out.close();
-                            dataOut.close();
-                            connect.close(); // we close socket connection
-                            getallthr();
-                        } catch (Exception e) {
-                            System.err.println("Error closing stream : " + e.getMessage());
-                        }
-
-                        if (verbose) {
-                            System.out.println("Connection closed.\n");
-                        }
+                } catch(FileNotFoundException fnfe){
+                    try {
+                        fileNotFound(out, dataOut, fileRequested);
+                    } catch (IOException ioe) {
+                        System.err.println("Error with file not found exception : " + ioe.getMessage());
                     }
+
+                } catch(Exception ioe){
+                    System.err.println("Server error : " + ioe);
+                } finally{
+                    try {
+                        bfis.close();
+                        out.close();
+                        dataOut.close();
+                        connect.close(); // we close socket connection
+                        getallthr();
+                    } catch (Exception e) {
+                        System.err.println("Error closing stream : " + e.getMessage());
+                    }
+
+                    if (verbose) {
+                        System.out.println("Connection closed.\n");
+                    }
+                }
 
             }
             private boolean isint(String inp)
             {
-                if (inp.length()>20) {
-                    if (inp.substring(1, 21).equals("bootstrap-4.0.0-dist") )
+                if (inp.length()>15) {
+                    if (inp.substring(1, 10).equals("servshare"))
                         return true;
                     else
                         return false;
@@ -420,16 +420,16 @@ public class network extends AsyncTask <Socket, Integer, Void> {
             }
             private void forcestop()
             {
-                        System.out.println("Force stop called");
-                        //Set<Thread> thr = Thread.getAllStackTraces().keySet();
-                        //Iterator it = thr.iterator();
-                        for (Thread t : Thread.getAllStackTraces().keySet())
-                        {  if (t.getState()==Thread.State.RUNNABLE)
-                            {
-                            System.out.println("Interrupter");
-                            t.interrupt();
-                        }
-                        }
+                System.out.println("Force stop called");
+                //Set<Thread> thr = Thread.getAllStackTraces().keySet();
+                //Iterator it = thr.iterator();
+                for (Thread t : Thread.getAllStackTraces().keySet())
+                {  if (t.getState()==Thread.State.RUNNABLE)
+                {
+                    System.out.println("Interrupter");
+                    t.interrupt();
+                }
+                }
 
 
             }

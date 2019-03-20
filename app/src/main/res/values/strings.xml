@@ -1,13 +1,15 @@
 <resources>
-    <string name="app_name">Contrify Share</string>
+    <string name="app_name">ServShare</string>
     <string name="step_1_txt">You must have a valid network connection</string>
-    <string name="step_1_desp">Ensure that this device and the remote are connected on the same network. Know more.</string>
-    <string name="step_3_txt">You have to open the URL in your remote\'s browser</string>
-    <string name="step_3_desp">0.0.0.0:53000</string>
+    <string name="step_1_desp">Ensure that this device and the remote are connected on the same network.</string>
+    <string name="step_4_txt">You have to open the URL in your remote\'s browser</string>
+    <string name="step_4_desp">0.0.0.0:53000</string>
     <string name="step_2_txt">Select the files you wish to share. (Tap Here)</string>
     <string name="step_2_desp">Only the files which you have selected will be available for upload</string>
-    <string name="step_4_txt">Download the files in your remote</string>
-    <string name="step_4_desp">You\'re done! Your host\'s browser will download the selected files</string>
+    <string name="step_5_txt">Download the files in your remote</string>
+    <string name="step_5_desp">You\'re done! Your host\'s browser will download the selected files</string>
+    <string name="step_3_txt">Tap on the power button (top right corner) to start the server</string>
+    <string name="step_3_desp">The button must turn green indicating that the Server has turned on</string>
     <string name="ctd_steps">Image file steps</string>
     <string name="selfil">S E L E C T    F I L E S</string>
     <string name="fs_but1">ADD FILES</string>
@@ -24,7 +26,7 @@
     <string name="pchwr">WARNING: You are attempting to change the default port. Please ensure that the port is not blocked, reserved or is in use by other application. Non compliance may lead to problems with your network configuration.</string>
     <string name="abtus">A B O U T</string>
     <string name="abtus_ver">Version:</string>
-    <string name="abtus_vrn">0.0.1</string>
+    <string name="abtus_vrn">0.1.0</string>
     <string name="abtus_cpr">Copyright \u00A9 reserved. No part of this software and all resources associated with the brand \'ServShare\' and \'ContrifyShare\' shall be used without prior permission. Distribution of software is free and all usage including commercial usage of this application is allowed as long as all usage are in purview of the copyright policy. </string>
     <string name="abtus_cpr2">This software has been tested in multiple testing conditions and various instances have been simulated to study the response and impact. The response and the impact of these studies were deemed to be satisfactory. </string>
     <string name="abtus_cp3">NETWORK INTERFERENCE: This software accepts connection on Port 53000 (Default) on the TCP/IP. This is an unreserved port so please ensure that this port isn\'t blocked or in use by other application or server. If it doesn\'t help, consider changing the port in the Settings.</string>
@@ -35,5 +37,13 @@
     <string name="svst_wr">SERVER STATUS UNKNOWN</string>
     <string name="svst_wr1">SERVER IS RUNNING</string>
     <string name="svst_wr2">SERVER HAS STOPPED</string>
-
+    <string name="set_b1">MODIFY</string>
+    <string name="frun_h1">F I R S T \/ R E S E T  R U N</string>
+    <string name="frun_h2">Welcome to ServShare. This application needs to extract some additional files into your external storage. Please accept the prompt to allow storage rights to the application. Tap on EXTRACT FILES to continue.</string>
+    <string name="frun_h3">If you have reset the application then the steps are also same.</string>
+    <string name="frun_b1">EXTRACT</string>
+    <string name="set_h1">RESET APPLICATION</string>
+    <string name="set_h2">This operation will reset the application to its original state. Any user information will be preserved.</string>
+    <string name="set_bt1">RESET</string>
+    <string name="abt_h1">To contact support email: contrifysoftware@gmail.com</string>
 </resources>

@@ -78,33 +78,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/svst_wr" />
 
-        <!--<Button
-            android:id="@+id/addfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="8dp"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:text="@string/fs_but1"
-            android:background="@drawable/buttons"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-        <Button
-            android:id="@+id/rmfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:text="@string/fs_but2"
-            android:background="@drawable/buttons"
-            app:layout_constraintStart_toEndOf="@id/addfile"
-            app:layout_constraintBottom_toBottomOf="parent" />-->
-
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
@@ -126,11 +99,9 @@
             android:layout_marginTop="6dp"
             android:textSize="15sp"
             android:height="25dp"
-            android:autofillHints="@string/edtnmeh"
             android:hint="@string/edtnmeh"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="@string/edtnme"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -140,8 +111,9 @@
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="6dp"
+            android:onClick="chprt"
             android:background="@drawable/buttons"
-            android:text="@string/fs_but2"
+            android:text="@string/set_b1"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@id/editport"
@@ -160,6 +132,46 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editport" />
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/set_h1"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/set_h2"
+            android:textColor="@android:color/holo_blue_bright"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <Button
+            android:id="@+id/resetapp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="6dp"
+            android:onClick="reset"
+            android:background="@drawable/buttons"
+            android:text="@string/set_bt1"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView5" />
+
 
     </android.support.constraint.ConstraintLayout>
     </ScrollView>
@@ -171,7 +183,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/drawer_view"
-        app:itemTextColor="@android:color/white"
+        app:itemTextColor="@android:color/holo_purple"
         app:headerLayout="@layout/nav_headernew"
         android:background="@drawable/drawer_back1">
 

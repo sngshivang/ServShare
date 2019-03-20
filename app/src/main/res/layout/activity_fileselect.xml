@@ -102,20 +102,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/addfile" />
 
-        <Button
-            android:id="@+id/test"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="12dp"
-            android:textSize="14sp"
-            android:onClick="getip"
-            android:text="@string/fs_but2"
-            android:textColor="@android:color/white"
-            android:background="@drawable/buttons"
-            app:layout_constraintStart_toEndOf="@id/rmfile"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
     <ListView
         android:id="@+id/filelst"
         android:layout_width="330dp"
