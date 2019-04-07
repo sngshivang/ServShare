@@ -97,11 +97,11 @@
             android:layout_height="40dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="6dp"
-            android:textSize="15sp"
             android:height="25dp"
-            android:hint="@string/edtnmeh"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:hint="@string/edtnmeh"
+            android:inputType="number"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 

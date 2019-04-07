@@ -46,7 +46,8 @@ public class network extends AsyncTask <Socket, Integer, Void> {
             final File WEB_ROOT= Environment.getExternalStorageDirectory();
             String DEFAULT_FILE = "/servshare_main.html";
             boolean rnr=true;
-            private String bound="";
+            private String bound="", frn="SVSHARE_ERR_NF";;
+            int cnt=0,tc=0;
             final String FILE_NOT_FOUND = "404.html";
             ServerSocket serverConnect;
             final String METHOD_NOT_SUPPORTED = "not_supported.html";
@@ -67,14 +68,10 @@ public class network extends AsyncTask <Socket, Integer, Void> {
             }
             public void first() {
                 try {
-                    Log.i("FLOW","FISRT");
                     serverConnect = new ServerSocket(PORT);
                     System.out.println("Server started.\nListening for connections on port : " + PORT + " ...\n");
-
                     // we listen until user halts server execution
                     while (rnr) {
-
-                        Log.i("Waiting","1");
                         if (isCancelled())
                         {
                             serverConnect.close();
@@ -114,7 +111,6 @@ public class network extends AsyncTask <Socket, Integer, Void> {
 
                 try {
                     if (isCancelled()) {
-                        Log.i("FLOW", "ISCAN2");
                         rnr=false;
                         try {
                             out.close();
@@ -134,16 +130,23 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                         bfis=new BufferedInputStream(connect.getInputStream());
                         b= new byte[1024];bt2= new byte[1024]; bt3 = new byte[1024];
                         //in = new BufferedReader(new InputStreamReader(connect.getInputStream()));
-                        fos2 = new FileOutputStream(new File(WEB_ROOT,"google.txt"));
                         // we get character output stream to client (for headers)
                         out = new PrintWriter(connect.getOutputStream());
                         String method="";
+                        new File(WEB_ROOT,"servshare_files").mkdirs();
                         // get binary output stream to client (for requested data)
                         dataOut = new BufferedOutputStream(connect.getOutputStream());
-                        tout = new BufferedWriter(out);
-                        int i=0,temp=0,j=3,lbc=0,ofc,off=0,b1=0,b2=0; boolean trip= true;
-                        for (int readNum; (readNum = bfis.read(b)) != -1;)
+                        int i=0,temp=0,j=3,lbc=0,stop=3,crp=0,mpos=0;
+                        boolean trip= true,rdvl=true,wl=false,pwr=true,trip4=true,trip2=false;
+                        while(true)
                         {
+                            if (rdvl)
+                            {
+                                if (bfis.read(b)==-1)
+                                    break;
+                            }
+                            if (stop==0)
+                                break;
                             int s=0;
                             if (i==0) {
                                 while (b[s]!=32) {
@@ -155,18 +158,13 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                     fileRequested+=(char)b[s];
                                     s++;
                                 }
-                                System.out.println("Method: "+method);
-                                System.out.println("File "+fileRequested);
                             }
                             if (method.equals("POST")||i!=0) {
-                                off =readNum;
                                 if (trip)
-                                {
-                                    bound=boundary(b);
-                                }
+                                bound=boundary(b);
                                 for (j=0;j<1024&&trip;j++)
                                 {
-                                    if (lbc<18)
+                                    if (lbc<13)
                                     {
                                         if (b[j]==13)
                                             lbc++;
@@ -181,53 +179,133 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                     }
                                 }
                                 if (!trip) {
-                                    if(i==2){
-                                        fos2.write(bt3,temp,Math.abs(1024-temp));
-                                    }else if (i>2){
-                                        fos2.write(bt3,0,1024);
-                                    }
-                                    fos2.flush();
-                                    bt3 = bt2.clone();
-                                    bt2 = b.clone();
-                                    i++;
-
-                                    if (readEnd(bt3,bt2,0)!=-1)
+                                    if (wl)
                                     {
-                                        if (i<2)
+                                        crp-=1024;
+                                        cnt=0;
+                                        mpos = ffname(bt3,bt2,crp);
+                                        if (!frn.equals("SVSHARE_ERR_NF")&&mpos!=-1)
                                         {
-                                            byte[] nbt = new byte[1024];
-                                            off = readEnd(b,nbt,temp);
-                                            fos2.write(b,temp,Math.abs(off-2-temp));
+                                            trip2=true;
+                                            wl=false;
                                         }
-                                        else if (i==2)
-                                        {
-                                            off = readEnd(bt3,bt2,temp);
-                                            if (off<=1024)
-                                                fos2.write(bt3,temp,off-2);
-                                            else
-                                            {
-                                                fos2.write(bt3, temp , 1024);
-                                                fos2.write(bt2, 0, off-1024-2);
-                                            }
-
+                                        else {
+                                            wl=true;
                                         }
-                                        else
-                                        {
-                                            off = readEnd(bt3,bt2,0);
-                                            System.out.println("BEYOFF "+off);
-                                            if (off<=1024)
-                                                fos2.write(bt3,0,off-2);
-                                            else
-                                            {
-                                                fos2.write(bt3, 0 , 1024);
-                                                fos2.write(bt2, 0, (off-1024)-2);
-                                            }
-
-                                        }
-                                        break;
+                                        //System.out.println("wl val "+frn+" "+mpos);
                                     }
+                                    else if (!trip2&&(crp=readEnd(bt3,bt2,0,bound))!=-1&&tc<21)
+                                    {
+                                        System.out.println("Else if called");
+                                        tc++;
+                                        if (crp<1024)
+                                        {
+                                            s=crp+bound.length();
+                                            for (int p=0;p<s&&p<1024;p++)
+                                                bt3[p]=0;
+                                        }
+                                        else {
+                                            s=crp-1024;
+                                            s+=bound.length();
+                                            for (int p=0;p<1024;p++)
+                                                bt3[p]=0;
+                                            for (int p=0;p<s&&p<1024;p++)
+                                                bt2[p]=0;
+                                        }
 
+                                        mpos = ffname(bt3,bt2,crp);
+                                        if (!frn.equals("SVSHARE_ERR_NF")&&mpos!=-1)
+                                        {
+                                            trip2=true;
+                                            wl=false;
+                                        }
+                                        else {
+                                            wl=true;
+                                        }
+                                    }
+                                    if (readEnd(bt2,b,0,bound+"--")==-1)
+                                        rdvl=true;
+                                    else
+                                        rdvl=false;
+                                    pwr=true;
+                                    if (trip2&&!wl) {
+                                        if (trip4)
+                                        {
+                                            if (frn.equals(""))
+                                                frn="BLANKFILE";
+                                            try {
+                                                fos2 = new FileOutputStream(new File(WEB_ROOT+"/servshare_files/",frn));
+                                            }
+                                            catch(Exception e)
+                                            {
+                                                e.printStackTrace();
+                                            }
+                                            trip4=false;
+                                        }
+                                        if ((crp=readEnd(bt3,bt2,0,bound))!=-1)
+                                        {
+                                            tc++;
+                                            int ofst=0;
+                                            if (mpos!=-1)
+                                                ofst=mpos+2;
+                                            //System.out.println(ofst+" offset");
+                                            if (crp<1024)
+                                            {
+                                                fos2.write(bt3,ofst,(Math.abs(crp-ofst))-2);
+                                                for (int z=0;z<crp;z++)
+                                                    bt3[z]=0;
+                                            }
+                                            else
+                                            {
+                                                crp-=1024;
+                                                if (ofst<1024) {
+                                                    fos2.write(bt3,ofst,1024-ofst);
+                                                    fos2.write(bt2,0,crp-2);
+                                                }
+                                                else
+                                                {
+                                                    ofst-=1024;
+                                                    fos2.write(bt2, ofst, (Math.abs(ofst-crp))-2);
+                                                }
+                                                for (int z=0;z<1024;z++)
+                                                    bt3[z]=0;
+                                                for (int z=0;z<crp;z++)
+                                                    bt2[z]=0;
+                                            }
+                                            fos2.close();
+                                            if (readEnd(bt3,bt2,0,bound+"--")!=-1&&tc>19)
+                                            {
+                                                tc=0;
+                                                break;
+                                            }
+                                            trip4=true;
+                                            cnt=0;mpos=-1;
+                                            pwr = false;
+                                            rdvl=false;
+                                            trip2=false;
+                                            wl=false;
+                                            frn="SVSHARE_ERR_NF";
+                                        }
+
+                                        if (mpos!=-1&&pwr)
+                                        {
+                                            if (mpos<1024) {
+                                                fos2.write(bt3, mpos+2, (1024-mpos)-2);
+                                                mpos=-1;
+                                            }
+                                            else
+                                                mpos-=1024;
+                                        }
+                                        else if (trip2&&!wl&&pwr)
+                                            fos2.write(bt3, 0, 1024);
+                                        fos2.flush();
+                                    }
+                                    if (pwr) {
+                                        bt3 = bt2.clone();
+                                        bt2 = b.clone();
+                                    }
                                 }
+                                i++;
                             }
                             else break;
                         }
@@ -271,45 +349,6 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                             dataOut.flush();
 
                         }
-                        else if (method.equals("POST"))
-                        {
-                            Log.i("POST","Hey post request");
-                            try {
-                                DataInputStream dis = new DataInputStream(new BufferedInputStream(connect.getInputStream()));
-                                DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(connect.getOutputStream()));
-//read the number of files from the client
-                                int number = dis.readInt();
-                                ArrayList<File> files = new ArrayList<>(number);
-                                System.out.println("Number of Files to be received: " +number);
-                                //read file names, add files to arraylist
-                                for(i = 0; i< number;i++){
-                                    File file = new File(dis.readUTF());
-                                    files.add(file);
-                                }
-                                int n = 0;
-                                byte[]buf = new byte[4092];
-
-                                //outer loop, executes one for each file
-                                for(i = 0; i < files.size();i++){
-
-                                    System.out.println("Receiving file: " + files.get(i).getName());
-                                    //create a new fileoutputstream for each new file
-                                    FileOutputStream fos = new FileOutputStream(WEB_ROOT.getPath()+files.get(i).getName());
-                                    //read file
-                                    String line;
-                                    while((line = in.readLine()) != null){
-                                        fos.write(buf,0,n);
-                                        fos.flush();
-                                    }
-                                    fos.close();
-                                }
-
-                            } catch (Exception e) {
-                                // TODO Auto-generated catch block
-                                Log.e("POST",e.toString());
-
-                            }
-                        }
                         else
                         {
                             // GET or HEAD method
@@ -319,7 +358,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                 int fileLength = (int) file.length();
                                 String content = getContentType(fileRequested);
 
-                                if (method.equals("GET")) { // GET method so we return content
+                                if (method.equals("GET")||method.equals("POST")) { // GET method so we return content
                                     byte[] fileData = readFileData(file, fileLength);
 
                                     // send HTTP Headers
@@ -342,7 +381,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                 Log.i("REQ", fileRequested);
                                 File file = new File(WEB_ROOT, fileRequested);
                                 int fileLength = (int) file.length();
-                                if (method.equals("GET")) { // GET method so we return content
+                                if (method.equals("GET")||method.equals("POST")) { // GET method so we return content
                                     byte[] fileData = readFileData(file, fileLength);
                                     out.println("HTTP/1.1 200 OK");
                                     out.println("Contrify Share Socket");
@@ -355,12 +394,13 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                     dataOut.flush();
                                 }
                             } else {
+                                fileRequested=fileRequested.replace("%20"," ");
                                 File file = new File(fileRequested);
                                 Log.i("MiscFile", fileRequested);
                                 int fileLength = (int) file.length();
                                 fis = new FileInputStream(file);
                                 int count;
-                                if (method.equals("GET")) { // GET method so we return content
+                                if (method.equals("GET")||method.equals("POST")) { // GET method so we return content
                                     //byte[] fileData = readFileData(file, fileLength);
                                     out.println("HTTP/1.1 200 OK");
                                     out.println("Contrify Share Socket");
@@ -396,7 +436,6 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                         out.close();
                         dataOut.close();
                         connect.close(); // we close socket connection
-                        getallthr();
                     } catch (Exception e) {
                         System.err.println("Error closing stream : " + e.getMessage());
                     }
@@ -421,8 +460,6 @@ public class network extends AsyncTask <Socket, Integer, Void> {
             private void forcestop()
             {
                 System.out.println("Force stop called");
-                //Set<Thread> thr = Thread.getAllStackTraces().keySet();
-                //Iterator it = thr.iterator();
                 for (Thread t : Thread.getAllStackTraces().keySet())
                 {  if (t.getState()==Thread.State.RUNNABLE)
                 {
@@ -432,13 +469,6 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                 }
 
 
-            }
-            private void getallthr()
-            {
-                for (Thread t : Thread.getAllStackTraces().keySet())
-                {
-                    Log.i("Thread",t.getName());
-                }
             }
             private byte[] readFileData(File file, int fileLength) throws IOException {
                 FileInputStream fileIn = null;
@@ -484,7 +514,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                     System.out.println("File " + fileRequested + " not found");
                 }
             }
-            private int readEnd(byte[] ba, byte[] bb,  int j)
+            private int readEnd(byte[] ba, byte[] bb,  int j, String inps)
             {
                 int i;
                 for (i=0;i<j;i++)
@@ -494,19 +524,10 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                     bc[i] = ba[i];
                 for (i=1024;i<2048;i++)
                     bc[i] = bb[i-1024];
-                int fnd = KMPSearch(bound,bc);
-                return fnd;
+                return (KMPSearch(inps,bc));
 
             }
-            private String cntlnt(byte[] b)
-            {
-                int fnd = KMPSearch("Content-Length:",b);
-                String out = "";
-                for (int i=fnd+16;b[i]!=13;i++)
-                    out=out+b[i];
-                return out;
-            }
-            int KMPSearch(String pat, byte[] txt)
+            private int KMPSearch(String pat, byte[] txt)
             {
                 int M = pat.length(),fnd=-1;
                 int N = 2048;
@@ -525,8 +546,6 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                         j = lps[j - 1];
                         break;
                     }
-
-                    // mismatch after j matches
                     else if (i < N && pat.charAt(j) != (char)txt[i]) {
                         if (j != 0)
                             j = lps[j - 1];
@@ -536,8 +555,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                 }
                 return fnd;
             }
-            //private void finalise(int i,)
-            void computeLPSArray(String pat, int M, int lps[])
+            private void computeLPSArray(String pat, int M, int lps[])
             {
                 // length of the previous longest prefix suffix
                 int len = 0;
@@ -551,18 +569,12 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                         lps[i] = len;
                         i++;
                     }
-                    else // (pat[i] != pat[len])
+                    else
                     {
-                        // This is tricky. Consider the example.
-                        // AAACAAAA and i = 7. The idea is similar
-                        // to search step.
                         if (len != 0) {
                             len = lps[len - 1];
-
-                            // Also, note that we do not increment
-                            // i here
                         }
-                        else // if (len == 0)
+                        else
                         {
                             lps[i] = len;
                             i++;
@@ -573,6 +585,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
             private String boundary(byte[] b)
             {
                 int j;
+
                 String bstr="";
                 for (j=0;j<1020;j++)
                 {
@@ -590,18 +603,57 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                 bstr = "--"+bstr;
                 return bstr;
             }
-        }
-        boolean tsr=true;
-        JavaHTTPServer js = new JavaHTTPServer();
-        Log.i("FLOW","MAIN");
-        /*while (tsr) {
-            //js.first();
-            if (isCancelled()) {
-                Log.i("FLOW", "ISCAN3");
-                js.forcestop();
-                tsr = false;
+            private int ffname(byte[] ba, byte[] bb,  int j)
+            {
+                int i,spos=-1; boolean trip=false,trip2=false;
+                String fname="";
+                byte[] bc = new byte[2048];
+                for (i=0;i<1024;i++)
+                    bc[i] = ba[i];
+                for (i=1024;i<2048;i++)
+                    bc[i] = bb[i-1024];
+                int pos=KMPSearch("filename",bc);
+                if (pos!=-1)
+                {
+                    pos+=10;
+                    while (pos<2048&&bc[pos]!='"')
+                    {
+                        if (bc[pos]!='"') {
+                            fname+=(char)bc[pos];
+                            pos++;
+                        }
+                        else
+                        {
+                            trip=true;
+                            break;
+                        }
+                    }
+
+                    if (pos>2047&&!trip)
+                    {
+                        trip2=true;
+                    }
+                }
+
+                else trip2=true;
+                pos=j;
+                while (pos<2048&&cnt<3)
+                {
+                    if (bc[pos]==13)
+                        cnt++;
+                    pos++;
+                }
+                if (!(pos>2047&&cnt<3))
+                    spos=pos+1;
+                if (trip2)
+                    frn="SVSHARE_ERR_NF";
+                else
+                    frn=fname;
+                return spos;
+
             }
-        }*/
+        }
+        JavaHTTPServer js = new JavaHTTPServer();
         js.first();
         return null;
     }

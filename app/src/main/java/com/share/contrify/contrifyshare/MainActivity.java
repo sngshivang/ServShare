@@ -77,12 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 // result of the request.
             }
         }
-        //DEFAULT_FILE = "android.resource://" + this.getPackageName() + "/raw/rewind_results"; //+ R.raw.rewind_results;
-        //DEFAULT_FILE=Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.rewind_results).toString();
-        //DEFAULT_FILE="file:///sdcard/rewind_results.html";
         iv = findViewById(R.id.imageView7);
         getcurrip();
-        //WEB_ROOT = new File("File:///sdcard")
 
     }
     DrawerLayout dr;
@@ -122,9 +118,14 @@ public class MainActivity extends AppCompatActivity {
     protected void getcurrip()
     {
         ip=Utils.getIPAddress(true);
-        Log.i("IPA",ip);
         TextView tv = findViewById(R.id.textView8);
-        tv.setText((ip+":"+universals.port));
+        if (ip.equals(""))
+            tv.setText("NOT CONNECTED");
+        else
+            tv.setText((ip+":"+universals.port));
+        Log.i("IPA",ip);
+
+
     }
     @Override
     protected void onResume()
