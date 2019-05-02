@@ -5,6 +5,12 @@
             android:id="@+id/nav_home"
             android:title="@string/nv_hme" />
         <item
+            android:id="@+id/nav_upl"
+            android:title="@string/nv_upl" />
+        <item
+            android:id="@+id/nav_dwn"
+            android:title="@string/nv_dwn" />
+        <item
             android:id="@+id/nav_set"
             android:title="@string/nv_set" />
         <item

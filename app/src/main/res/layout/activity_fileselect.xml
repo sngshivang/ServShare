@@ -15,7 +15,7 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="246dp"
+        android:layout_width="200dp"
         android:layout_height="52dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/ctd_steps"
@@ -35,21 +35,32 @@
         app:srcCompat="@drawable/menu_vect"
         android:contentDescription="@string/ctd_steps"/>
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="51dp"
-        android:layout_height="42dp"
-        android:onClick="svstart"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/power_sel"
-        android:contentDescription="@string/ctd_steps"/>
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="43dp"
+            android:layout_height="35dp"
+            android:onClick="svstart"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/send_off"
+            android:contentDescription="@string/ctd_steps"/>
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="43dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="18dp"
+            android:contentDescription="@string/ctd_steps"
+            android:onClick="upstart"
+            app:layout_constraintEnd_toStartOf="@id/imageView7"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/receive_off" />
 
         <TextView
             android:id="@+id/svst_wr"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
@@ -58,6 +69,19 @@
             android:textColor="@android:color/darker_gray"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+        <TextView
+            android:id="@+id/svst_wru"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/svst_wru"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/svst_wr"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <TextView

@@ -34,9 +34,12 @@
     <string name="git_msft">GitHub is a registered trademark of Microsoft Corporation. \u00A9 Microsoft Corporation. All rights reserved.</string>
     <string name="empt_lv">Add files in the list to share</string>
     <string name="empt_lv1">It is lonely in here!</string>
-    <string name="svst_wr">SERVER STATUS UNKNOWN</string>
-    <string name="svst_wr1">SERVER IS RUNNING</string>
-    <string name="svst_wr2">SERVER HAS STOPPED</string>
+    <string name="svst_wr">SEND UNKNOWN</string>
+    <string name="svst_wr1">SEND ON</string>
+    <string name="svst_wr2">SEND OFF</string>
+    <string name="svst_wru">RECEIVE UNKNOWN</string>
+    <string name="svst_wr1u">RECEIVE ON</string>
+    <string name="svst_wr2u">RECEIVE OFF</string>
     <string name="set_b1">MODIFY</string>
     <string name="frun_h1">F I R S T \/ R E S E T  R U N</string>
     <string name="frun_h2">Welcome to ServShare. This application needs to extract some additional files into your external storage. Please accept the prompt to allow storage rights to the application. Tap on EXTRACT FILES to continue.</string>
@@ -46,4 +49,21 @@
     <string name="set_h2">This operation will reset the application to its original state. Any user information will be preserved.</string>
     <string name="set_bt1">RESET</string>
     <string name="abt_h1">To contact support email: contrifysoftware@gmail.com</string>
+    <string name="str_h1">Select your option</string>
+    <string name="upmod_h1">R E C E I V E F I L E S</string>
+    <string name="upmod_desp">To receive the files from client to this host device, send files using FTP via any client. Use this configuration</string>
+    <string name="upmod_uname">User Name: NOT AVAILABLE</string>
+    <string name="upmod_pass">Password: NOT AVAILABLE</string>
+    <string name="upmod_ipa">IP+PORT: NOT AVAILABLE</string>
+    <string name="upmod_files">YOUR FILES ARE STORED AT \"servshare_files\" directory in your storage device.</string>
+    <string name="upmod_info">INFORMATION: To change the user name or password, head to settings. Transmission of information is done without TLS.</string>
+    <string name="upmod_b1">START/STOP SERVER</string>
+    <string name="nv_upl">Send Files</string>
+    <string name="nv_dwn">Receive Files</string>
+    <string name="set_h3">Change FTP Username/Password</string>
+    <string name="set_ed_1">New Username</string>
+    <string name="set_ed_2">New Password</string>
+    <string name="set_hnt">Changing the username and password is currently not persistent and resets upon app restart. </string>
+
+
 </resources>

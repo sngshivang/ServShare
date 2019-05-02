@@ -41,13 +41,15 @@ public class firstrun extends AppCompatActivity {
         setContentView(R.layout.activity_firstrun);
         if (reader())
         {
-            Intent it = new Intent(this,MainActivity.class);
+            Intent it = new Intent(this,starter.class);
             startActivity(it);
         }
         dr = findViewById(R.id.drawer_layout);
         nv = findViewById(R.id.nav_view);
         svs_tv = findViewById(R.id.svst_wr);
         iv = findViewById(R.id.imageView7);
+        iv2= findViewById(R.id.imageView8);
+        svs_tvu=findViewById(R.id.svst_wru);
         if (ActivityCompat.checkSelfPermission(firstrun.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -76,8 +78,8 @@ public class firstrun extends AppCompatActivity {
     int perval;
     DrawerLayout dr;
     NavigationView nv;
-    TextView svs_tv;
-    ImageView iv;
+    TextView svs_tv,svs_tvu;
+    ImageView iv,iv2;
     private void navstuff()
     {
         nv.setNavigationItemSelectedListener(
@@ -87,7 +89,7 @@ public class firstrun extends AppCompatActivity {
                         mt.setChecked(true);
                         if (mt.getItemId()==R.id.nav_home)
                         {
-                            Intent it = new Intent(firstrun.this,MainActivity.class);
+                            Intent it = new Intent(firstrun.this,starter.class);
                             startActivity(it);
                         }
                         else if (mt.getItemId()==R.id.nav_set)
@@ -98,6 +100,16 @@ public class firstrun extends AppCompatActivity {
                         else if (mt.getItemId()==R.id.nav_about)
                         {
                             Intent it = new Intent(firstrun.this,about.class);
+                            startActivity(it);
+                        }
+                        else if (mt.getItemId()==R.id.nav_upl)
+                        {
+                            Intent it = new Intent(firstrun.this,MainActivity.class);
+                            startActivity(it);
+                        }
+                        else if (mt.getItemId()==R.id.nav_dwn)
+                        {
+                            Intent it = new Intent(firstrun.this,uploader_mod.class);
                             startActivity(it);
                         }
                         dr.closeDrawers();
@@ -112,14 +124,27 @@ public class firstrun extends AppCompatActivity {
     private void modimg()
     {
         if (sv_module.getstat()) {
-            iv.setImageResource(R.drawable.power_sel_on);
+            iv.setImageResource(R.drawable.send_main);
             svs_tv.setText(R.string.svst_wr1);
             svs_tv.setTextColor(Color.parseColor("#02F424"));
         }
         else{
-            iv.setImageResource(R.drawable.power_sel);
+            iv.setImageResource(R.drawable.send_main_off);
             svs_tv.setText(R.string.svst_wr2);
             svs_tv.setTextColor(Color.parseColor("#FF0000"));
+        }
+    }
+    private void modimg2()
+    {
+        if (uploadser.getstat()) {
+            iv2.setImageResource(R.drawable.receive_main_off);
+            svs_tvu.setText(R.string.svst_wr2u);
+            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
+        }
+        else{
+            iv2.setImageResource(R.drawable.receive_main);
+            svs_tvu.setText(R.string.svst_wr1u);
+            svs_tvu.setTextColor(Color.parseColor("#02F424"));
         }
     }
     @Override
@@ -127,20 +152,36 @@ public class firstrun extends AppCompatActivity {
     {
         super.onResume();
         modimg();
+        modimg2();
     }
     public void svstart(View v)
     {
         if (sv_module.getstat()){
-            iv.setImageResource(R.drawable.power_sel);
+            iv.setImageResource(R.drawable.send_main_off);
             svs_tv.setText(R.string.svst_wr2);
             svs_tv.setTextColor(Color.parseColor("#FF0000"));
         }
         else{
-            iv.setImageResource(R.drawable.power_sel_on);
+            iv.setImageResource(R.drawable.send_main);
             svs_tv.setText(R.string.svst_wr1);
             svs_tv.setTextColor(Color.parseColor("#02F424"));
         }
         sv_module.ststart();
+    }
+    public void upstart(View v)
+    {
+        if (uploadser.getstat()){
+            iv2.setImageResource(R.drawable.receive_main);
+            svs_tvu.setText(R.string.svst_wr1u);
+            svs_tvu.setTextColor(Color.parseColor("#02F424"));
+            uploadser.ftpsstart();
+        }
+        else{
+            iv2.setImageResource(R.drawable.receive_main_off);
+            svs_tvu.setText(R.string.svst_wr2u);
+            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
+            uploadser.stopser();
+        }
     }
     public void cpfl(View v)
     {

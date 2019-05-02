@@ -5,37 +5,33 @@ import android.graphics.Color;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
-
-public class setting extends AppCompatActivity {
+public class starter extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
+        setContentView(R.layout.activity_starter);
         dr = findViewById(R.id.drawer_layout);
-        svs_tv=findViewById(R.id.svst_wr);
         nv = findViewById(R.id.nav_view);
-        iv = findViewById(R.id.imageView7);
+        svs_tv = findViewById(R.id.svst_wr);
         iv2= findViewById(R.id.imageView8);
+        iv = findViewById(R.id.imageView7);
         svs_tvu=findViewById(R.id.svst_wru);
         navstuff();
+        modimg();
+
     }
     DrawerLayout dr;
-    ImageView iv,iv2;
     NavigationView nv;
     TextView svs_tv,svs_tvu;
+    ImageView iv,iv2;
     private void navstuff()
     {
         nv.setNavigationItemSelectedListener(
@@ -45,33 +41,34 @@ public class setting extends AppCompatActivity {
                         mt.setChecked(true);
                         if (mt.getItemId()==R.id.nav_home)
                         {
-                            Intent it = new Intent(setting.this,starter.class);
+                            Intent it = new Intent(starter.this,starter.class);
                             startActivity(it);
                         }
                         else if (mt.getItemId()==R.id.nav_set)
                         {
-                            Intent it = new Intent(setting.this,setting.class);
+                            Intent it = new Intent(starter.this,setting.class);
                             startActivity(it);
                         }
                         else if (mt.getItemId()==R.id.nav_about)
                         {
-                            Intent it = new Intent(setting.this,about.class);
+                            Intent it = new Intent(starter.this,about.class);
                             startActivity(it);
                         }
                         else if (mt.getItemId()==R.id.nav_upl)
                         {
-                            Intent it = new Intent(setting.this,MainActivity.class);
+                            Intent it = new Intent(starter.this,MainActivity.class);
                             startActivity(it);
                         }
                         else if (mt.getItemId()==R.id.nav_dwn)
                         {
-                            Intent it = new Intent(setting.this,uploader_mod.class);
+                            Intent it = new Intent(starter.this,uploader_mod.class);
                             startActivity(it);
                         }
                         dr.closeDrawers();
                         return true;
                     }
                 });
+
     }
     public void opendrawer(View v)
     {
@@ -83,33 +80,6 @@ public class setting extends AppCompatActivity {
         super.onResume();
         modimg();
         modimg2();
-
-    }
-    private void modimg()
-    {
-        if (sv_module.getstat()) {
-            iv.setImageResource(R.drawable.send_main);
-            svs_tv.setText(R.string.svst_wr1);
-            svs_tv.setTextColor(Color.parseColor("#02F424"));
-        }
-        else{
-            iv.setImageResource(R.drawable.send_main_off);
-            svs_tv.setText(R.string.svst_wr2);
-            svs_tv.setTextColor(Color.parseColor("#FF0000"));
-        }
-    }
-    private void modimg2()
-    {
-        if (uploadser.getstat()) {
-            iv2.setImageResource(R.drawable.receive_main_off);
-            svs_tvu.setText(R.string.svst_wr2u);
-            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
-        }
-        else{
-            iv2.setImageResource(R.drawable.receive_main);
-            svs_tvu.setText(R.string.svst_wr1u);
-            svs_tvu.setTextColor(Color.parseColor("#02F424"));
-        }
     }
     public void svstart(View v)
     {
@@ -140,45 +110,40 @@ public class setting extends AppCompatActivity {
             uploadser.stopser();
         }
     }
-    public void chprt(View v)
+    public void cpfl(View v)
     {
-        svstart(null);
-        EditText et = findViewById(R.id.editport);
-        String inp = et.getText().toString();
-        int val = Integer.parseInt(inp);
-        universals.chport(val);
-
+        Intent it = new Intent(this, uploader_mod.class);
+        startActivity(it);
     }
-    public void reset(View v)
+    public void dwnfl(View v)
     {
-        AlertDialog.Builder abd = new AlertDialog.Builder(this);
-        try {
-            File fl = new File(this.getFilesDir(), "SYSFILE1");
-            if (!fl.delete())
-            {
-                abd.setTitle("FAILURE");
-                abd.setMessage("Reset operation was not successful. Please try again. If the problem persists, contact support");
-                abd.show();
-            }
-            Intent it = new Intent(this,firstrun.class);
-            startActivity(it);
+        Intent it = new Intent(this, MainActivity.class);
+        startActivity(it);
+    }
+    private void modimg()
+    {
+        if (sv_module.getstat()) {
+            iv.setImageResource(R.drawable.send_main);
+            svs_tv.setText(R.string.svst_wr1);
+            svs_tv.setTextColor(Color.parseColor("#02F424"));
         }
-        catch (Exception e)
-        {
-            Log.e("settings",e.toString());
-            abd.setTitle("FAILURE");
-            abd.setMessage("Fatal Exception occurred. Contact Support");
-            abd.show();
-
+        else{
+            iv.setImageResource(R.drawable.send_main_off);
+            svs_tv.setText(R.string.svst_wr2);
+            svs_tv.setTextColor(Color.parseColor("#FF0000"));
         }
     }
-    public void chup(View v)
+    private void modimg2()
     {
-        EditText ed = findViewById(R.id.editport1);
-        EditText ed2 = findViewById(R.id.editport2);
-        String un = ed.getText().toString();
-        String ps = ed2.getText().toString();
-        universals.chusrpass(un,ps);
+        if (uploadser.getstat()) {
+            iv2.setImageResource(R.drawable.receive_main_off);
+            svs_tvu.setText(R.string.svst_wr2u);
+            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
+        }
+        else{
+            iv2.setImageResource(R.drawable.receive_main);
+            svs_tvu.setText(R.string.svst_wr1u);
+            svs_tvu.setTextColor(Color.parseColor("#02F424"));
+        }
     }
-
 }

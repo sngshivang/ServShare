@@ -24,7 +24,9 @@
         <activity android:name=".fileselect" />
         <activity android:name=".setting" />
         <activity android:name=".about" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".uploader_mod" />
+        <activity android:name=".starter"></activity>
     </application>
 
 </manifest>

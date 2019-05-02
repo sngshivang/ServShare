@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.log4j.chainsaw.Main;
 import org.json.JSONArray;
 
 import java.io.BufferedOutputStream;
@@ -43,7 +44,7 @@ import java.util.StringTokenizer;
 public class MainActivity extends AppCompatActivity {
 
     int perval = 1;
-    ImageView iv;
+    ImageView iv,iv2;
     public String ip;
 
     @Override
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         nv = findViewById(R.id.nav_view);
         svs_tv = findViewById(R.id.svst_wr);
         navstuff();
+        iv2= findViewById(R.id.imageView9);
+        svs_tvu=findViewById(R.id.svst_wru);
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
     DrawerLayout dr;
     NavigationView nv;
-    TextView svs_tv;
+    TextView svs_tv,svs_tvu;
     private void navstuff()
     {
         nv.setNavigationItemSelectedListener(
@@ -93,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         mt.setChecked(true);
                         if (mt.getItemId()==R.id.nav_home)
                         {
-                            Intent it = new Intent(MainActivity.this,MainActivity.class);
+                            Intent it = new Intent(MainActivity.this,starter.class);
                             startActivity(it);
                         }
                         else if (mt.getItemId()==R.id.nav_set)
@@ -104,6 +107,16 @@ public class MainActivity extends AppCompatActivity {
                         else if (mt.getItemId()==R.id.nav_about)
                         {
                             Intent it = new Intent(MainActivity.this,about.class);
+                            startActivity(it);
+                        }
+                        else if (mt.getItemId()==R.id.nav_upl)
+                        {
+                            Intent it = new Intent(MainActivity.this,MainActivity.class);
+                            startActivity(it);
+                        }
+                        else if (mt.getItemId()==R.id.nav_dwn)
+                        {
+                            Intent it = new Intent(MainActivity.this,uploader_mod.class);
                             startActivity(it);
                         }
                         dr.closeDrawers();
@@ -133,19 +146,33 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         getcurrip();
         modimg();
+        modimg2();
 
     }
     private void modimg()
     {
         if (sv_module.getstat()) {
-            iv.setImageResource(R.drawable.power_sel_on);
+            iv.setImageResource(R.drawable.send_main);
             svs_tv.setText(R.string.svst_wr1);
             svs_tv.setTextColor(Color.parseColor("#02F424"));
         }
         else{
-            iv.setImageResource(R.drawable.power_sel);
+            iv.setImageResource(R.drawable.send_main_off);
             svs_tv.setText(R.string.svst_wr2);
             svs_tv.setTextColor(Color.parseColor("#FF0000"));
+        }
+    }
+    private void modimg2()
+    {
+        if (uploadser.getstat()) {
+            iv2.setImageResource(R.drawable.receive_main_off);
+            svs_tvu.setText(R.string.svst_wr2u);
+            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
+        }
+        else{
+            iv2.setImageResource(R.drawable.receive_main);
+            svs_tvu.setText(R.string.svst_wr1u);
+            svs_tvu.setTextColor(Color.parseColor("#02F424"));
         }
     }
     public void addfileit(View v)
@@ -156,15 +183,35 @@ public class MainActivity extends AppCompatActivity {
     public void svstart(View v)
     {
         if (sv_module.getstat()){
-            iv.setImageResource(R.drawable.power_sel);
+            iv.setImageResource(R.drawable.send_main_off);
             svs_tv.setText(R.string.svst_wr2);
             svs_tv.setTextColor(Color.parseColor("#FF0000"));
         }
         else{
-            iv.setImageResource(R.drawable.power_sel_on);
+            iv.setImageResource(R.drawable.send_main);
             svs_tv.setText(R.string.svst_wr1);
             svs_tv.setTextColor(Color.parseColor("#02F424"));
         }
         sv_module.ststart();
+    }
+    public void upstart(View v)
+    {
+        if (uploadser.getstat()){
+            iv2.setImageResource(R.drawable.receive_main);
+            svs_tvu.setText(R.string.svst_wr1u);
+            svs_tvu.setTextColor(Color.parseColor("#02F424"));
+            uploadser.ftpsstart();
+        }
+        else{
+            iv2.setImageResource(R.drawable.receive_main_off);
+            svs_tvu.setText(R.string.svst_wr2u);
+            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
+            uploadser.stopser();
+        }
+    }
+    public void upst(View v)
+    {
+        Intent it = new Intent(this, uploader_mod.class);
+        startActivity(it);
     }
 }

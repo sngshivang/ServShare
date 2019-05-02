@@ -101,7 +101,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                 // we manage our particular client connection
                 BufferedReader in = null; PrintWriter out = null; BufferedOutputStream dataOut = null;
                 BufferedInputStream bfis=null;
-                FileOutputStream fos2=null;
+                BufferedOutputStream fos2=null;
                 byte b[],bt2[],bt3[];
                 BufferedWriter tout=null;
                 String fileRequested = "";
@@ -128,7 +128,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                     } else {
                         // we read characters from the client via input stream on the socket
                         bfis=new BufferedInputStream(connect.getInputStream());
-                        b= new byte[1024];bt2= new byte[1024]; bt3 = new byte[1024];
+                        b= new byte[8192];bt2= new byte[8192]; bt3 = new byte[8192];
                         //in = new BufferedReader(new InputStreamReader(connect.getInputStream()));
                         // we get character output stream to client (for headers)
                         out = new PrintWriter(connect.getOutputStream());
@@ -161,8 +161,8 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                             }
                             if (method.equals("POST")||i!=0) {
                                 if (trip)
-                                bound=boundary(b);
-                                for (j=0;j<1024&&trip;j++)
+                                    bound=boundary(b);
+                                for (j=0;j<8192&&trip;j++)
                                 {
                                     if (lbc<13)
                                     {
@@ -181,7 +181,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                 if (!trip) {
                                     if (wl)
                                     {
-                                        crp-=1024;
+                                        crp-=8192;
                                         cnt=0;
                                         mpos = ffname(bt3,bt2,crp);
                                         if (!frn.equals("SVSHARE_ERR_NF")&&mpos!=-1)
@@ -198,18 +198,18 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                     {
                                         System.out.println("Else if called");
                                         tc++;
-                                        if (crp<1024)
+                                        if (crp<8192)
                                         {
                                             s=crp+bound.length();
-                                            for (int p=0;p<s&&p<1024;p++)
+                                            for (int p=0;p<s&&p<8192;p++)
                                                 bt3[p]=0;
                                         }
                                         else {
-                                            s=crp-1024;
+                                            s=crp-8192;
                                             s+=bound.length();
-                                            for (int p=0;p<1024;p++)
+                                            for (int p=0;p<8192;p++)
                                                 bt3[p]=0;
-                                            for (int p=0;p<s&&p<1024;p++)
+                                            for (int p=0;p<s&&p<8192;p++)
                                                 bt2[p]=0;
                                         }
 
@@ -234,7 +234,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                             if (frn.equals(""))
                                                 frn="BLANKFILE";
                                             try {
-                                                fos2 = new FileOutputStream(new File(WEB_ROOT+"/servshare_files/",frn));
+                                                fos2 = new BufferedOutputStream(new FileOutputStream(new File(WEB_ROOT+"/servshare_files/",frn)));
                                             }
                                             catch(Exception e)
                                             {
@@ -257,17 +257,17 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                             }
                                             else
                                             {
-                                                crp-=1024;
-                                                if (ofst<1024) {
-                                                    fos2.write(bt3,ofst,1024-ofst);
+                                                crp-=8192;
+                                                if (ofst<8192) {
+                                                    fos2.write(bt3,ofst,8192-ofst);
                                                     fos2.write(bt2,0,crp-2);
                                                 }
                                                 else
                                                 {
-                                                    ofst-=1024;
+                                                    ofst-=8192;
                                                     fos2.write(bt2, ofst, (Math.abs(ofst-crp))-2);
                                                 }
-                                                for (int z=0;z<1024;z++)
+                                                for (int z=0;z<8192;z++)
                                                     bt3[z]=0;
                                                 for (int z=0;z<crp;z++)
                                                     bt2[z]=0;
@@ -289,15 +289,15 @@ public class network extends AsyncTask <Socket, Integer, Void> {
 
                                         if (mpos!=-1&&pwr)
                                         {
-                                            if (mpos<1024) {
-                                                fos2.write(bt3, mpos+2, (1024-mpos)-2);
+                                            if (mpos<8192) {
+                                                fos2.write(bt3, mpos+2, (8192-mpos)-2);
                                                 mpos=-1;
                                             }
                                             else
-                                                mpos-=1024;
+                                                mpos-=8192;
                                         }
                                         else if (trip2&&!wl&&pwr)
-                                            fos2.write(bt3, 0, 1024);
+                                            fos2.write(bt3, 0, 8192);
                                         fos2.flush();
                                     }
                                     if (pwr) {
@@ -519,18 +519,18 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                 int i;
                 for (i=0;i<j;i++)
                     ba[i]=0;
-                byte[] bc = new byte[2048];
-                for (i=0;i<1024;i++)
+                byte[] bc = new byte[16384];
+                for (i=0;i<8192;i++)
                     bc[i] = ba[i];
-                for (i=1024;i<2048;i++)
-                    bc[i] = bb[i-1024];
+                for (i=8192;i<16384;i++)
+                    bc[i] = bb[i-8192];
                 return (KMPSearch(inps,bc));
 
             }
             private int KMPSearch(String pat, byte[] txt)
             {
                 int M = pat.length(),fnd=-1;
-                int N = 2048;
+                int N = 16384;
                 int lps[] = new int[M];
                 int j = 0; // index for pat[]
                 computeLPSArray(pat, M, lps);
@@ -587,7 +587,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                 int j;
 
                 String bstr="";
-                for (j=0;j<1020;j++)
+                for (j=0;j<8188;j++)
                 {
                     if (b[j]=='-'&&b[j+1]=='-'&&b[j+2]=='-')
                     {
@@ -607,16 +607,16 @@ public class network extends AsyncTask <Socket, Integer, Void> {
             {
                 int i,spos=-1; boolean trip=false,trip2=false;
                 String fname="";
-                byte[] bc = new byte[2048];
-                for (i=0;i<1024;i++)
+                byte[] bc = new byte[16384];
+                for (i=0;i<8192;i++)
                     bc[i] = ba[i];
-                for (i=1024;i<2048;i++)
-                    bc[i] = bb[i-1024];
+                for (i=8192;i<16384;i++)
+                    bc[i] = bb[i-8192];
                 int pos=KMPSearch("filename",bc);
                 if (pos!=-1)
                 {
                     pos+=10;
-                    while (pos<2048&&bc[pos]!='"')
+                    while (pos<16384&&bc[pos]!='"')
                     {
                         if (bc[pos]!='"') {
                             fname+=(char)bc[pos];
@@ -629,7 +629,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                         }
                     }
 
-                    if (pos>2047&&!trip)
+                    if (pos>16383&&!trip)
                     {
                         trip2=true;
                     }
@@ -637,13 +637,13 @@ public class network extends AsyncTask <Socket, Integer, Void> {
 
                 else trip2=true;
                 pos=j;
-                while (pos<2048&&cnt<3)
+                while (pos<16384&&cnt<3)
                 {
                     if (bc[pos]==13)
                         cnt++;
                     pos++;
                 }
-                if (!(pos>2047&&cnt<3))
+                if (!(pos>16383&&cnt<3))
                     spos=pos+1;
                 if (trip2)
                     frn="SVSHARE_ERR_NF";

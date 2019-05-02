@@ -41,12 +41,15 @@ public class fileselect extends AppCompatActivity {
         lst.setEmptyView(findViewById(R.id.elv2));
         st = new studadap(this,al);
         dr = findViewById(R.id.drawer_layout);
+        iv2= findViewById(R.id.imageView8);
+        svs_tvu=findViewById(R.id.svst_wru);
     }
     @Override
     protected void onResume()
     {
         super.onResume();
         modimg();
+        modimg2();
         lst = findViewById(R.id.filelst);
         st = new studadap(this,al);
         lst.setAdapter(st);
@@ -55,21 +58,34 @@ public class fileselect extends AppCompatActivity {
     private void modimg()
     {
         if (sv_module.getstat()) {
-            iv.setImageResource(R.drawable.power_sel_on);
+            iv.setImageResource(R.drawable.send_main);
             svs_tv.setText(R.string.svst_wr1);
             svs_tv.setTextColor(Color.parseColor("#02F424"));
         }
         else{
-            iv.setImageResource(R.drawable.power_sel);
+            iv.setImageResource(R.drawable.send_main_off);
             svs_tv.setText(R.string.svst_wr2);
             svs_tv.setTextColor(Color.parseColor("#FF0000"));
+        }
+    }
+    private void modimg2()
+    {
+        if (uploadser.getstat()) {
+            iv2.setImageResource(R.drawable.receive_main_off);
+            svs_tvu.setText(R.string.svst_wr2u);
+            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
+        }
+        else{
+            iv2.setImageResource(R.drawable.receive_main);
+            svs_tvu.setText(R.string.svst_wr1u);
+            svs_tvu.setTextColor(Color.parseColor("#02F424"));
         }
     }
     DrawerLayout dr;
     NavigationView nv;
     Uri currFileURI;
-    TextView svs_tv;
-    ImageView iv;
+    TextView svs_tv,svs_tvu;
+    ImageView iv,iv2;
     static ArrayList<fieldsinfo> al = new ArrayList<>();
     studadap st;
     fieldsinfo ifo;
@@ -152,16 +168,31 @@ public class fileselect extends AppCompatActivity {
     public void svstart(View v)
     {
         if (sv_module.getstat()){
-            iv.setImageResource(R.drawable.power_sel);
+            iv.setImageResource(R.drawable.send_main_off);
             svs_tv.setText(R.string.svst_wr2);
             svs_tv.setTextColor(Color.parseColor("#FF0000"));
         }
         else{
-            iv.setImageResource(R.drawable.power_sel_on);
+            iv.setImageResource(R.drawable.send_main);
             svs_tv.setText(R.string.svst_wr1);
             svs_tv.setTextColor(Color.parseColor("#02F424"));
         }
         sv_module.ststart();
+    }
+    public void upstart(View v)
+    {
+        if (uploadser.getstat()){
+            iv2.setImageResource(R.drawable.receive_main);
+            svs_tvu.setText(R.string.svst_wr1u);
+            svs_tvu.setTextColor(Color.parseColor("#02F424"));
+            uploadser.ftpsstart();
+        }
+        else{
+            iv2.setImageResource(R.drawable.receive_main_off);
+            svs_tvu.setText(R.string.svst_wr2u);
+            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
+            uploadser.stopser();
+        }
     }
     protected void writetofile(String inp)
     {

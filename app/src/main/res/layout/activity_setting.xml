@@ -19,7 +19,7 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="246dp"
+            android:layout_width="200dp"
             android:layout_height="52dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/ctd_steps"
@@ -41,19 +41,30 @@
 
         <ImageView
             android:id="@+id/imageView7"
-            android:layout_width="51dp"
-            android:layout_height="42dp"
+            android:layout_width="43dp"
+            android:layout_height="35dp"
             android:onClick="svstart"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/power_sel"
+            app:srcCompat="@drawable/send_off"
             android:contentDescription="@string/ctd_steps"/>
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="43dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="18dp"
+            android:contentDescription="@string/ctd_steps"
+            android:onClick="upstart"
+            app:layout_constraintEnd_toStartOf="@id/imageView7"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/receive_off" />
 
         <TextView
             android:id="@+id/svst_wr"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
@@ -62,6 +73,19 @@
             android:textColor="@android:color/darker_gray"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+        <TextView
+            android:id="@+id/svst_wru"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/svst_wru"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/svst_wr"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         <TextView
@@ -132,6 +156,76 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editport" />
 
+        <EditText
+            android:id="@+id/editport1"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:height="25dp"
+            android:ems="10"
+            android:hint="@string/set_ed_1"
+            android:inputType="number"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+        <EditText
+            android:id="@+id/editport2"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="6dp"
+            android:height="25dp"
+            android:ems="10"
+            android:hint="@string/set_ed_2"
+            android:inputType="number"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editport1" />
+
+        <Button
+            android:id="@+id/chunp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="6dp"
+            android:onClick="chup"
+            android:background="@drawable/buttons"
+            android:text="@string/set_b1"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editport2" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/set_h3"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/set_hnt"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chunp" />
+
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
@@ -143,7 +237,7 @@
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
         <TextView
             android:id="@+id/textView5"

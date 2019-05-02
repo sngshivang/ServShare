@@ -95,52 +95,42 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/calibri"
-                android:text="@string/frun_h1"
+                android:text="@string/str_h1"
                 android:textColor="@android:color/black"
                 android:textSize="25sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/svst_wr" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/calibri"
-                android:text="@string/frun_h3"
-                android:textColor="@android:color/holo_blue_bright"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
             <Button
-                android:id="@+id/chprt"
+                android:id="@+id/goupl"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="10dp"
                 android:onClick="cpfl"
                 android:background="@drawable/buttons"
-                android:text="@string/frun_b1"
+                android:text="UPLOAD"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView2" />
+                app:layout_constraintTop_toBottomOf="@id/textView1" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/calibri"
-                android:text="@string/frun_h2"
-                android:textColor="@android:color/holo_blue_light"
-                android:textSize="20sp"
+            <Button
+                android:id="@+id/godwl"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:onClick="dwnfl"
+                android:background="@drawable/buttons"
+                android:text="DOWNLOAD"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView1" />
+                app:layout_constraintTop_toBottomOf="@id/goupl" />
+
+
 
 
         </android.support.constraint.ConstraintLayout>
