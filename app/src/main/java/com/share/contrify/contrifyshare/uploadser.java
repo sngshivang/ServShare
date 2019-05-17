@@ -26,8 +26,8 @@ public class uploadser  {
             PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
             UserManager userManager = userManagerFactory.createUserManager();
             BaseUser user = new BaseUser();
-            user.setName("username");
-            user.setPassword("password");
+            user.setName(universals.usrnme);
+            user.setPassword(universals.spass);
             user.setHomeDirectory(WEB_ROOT.getPath() + "/servshare_files");
             List<Authority> auths = new ArrayList<>();
             Authority auth = new WritePermission();

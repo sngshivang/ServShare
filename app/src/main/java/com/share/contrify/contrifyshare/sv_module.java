@@ -35,7 +35,7 @@ public class sv_module {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 String ip = Utils.getIPAddress(true);
-                ip = "http://" + ip + ":53000";
+                ip = "http://" + ip + ":" + String.valueOf(universals.port);
                 try
 
                 {

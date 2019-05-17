@@ -142,11 +142,17 @@ public class setting extends AppCompatActivity {
     }
     public void chprt(View v)
     {
-        svstart(null);
+        if (sv_module.getstat())
+            svstart(null);
         EditText et = findViewById(R.id.editport);
         String inp = et.getText().toString();
         int val = Integer.parseInt(inp);
-        universals.chport(val);
+        if (val>1023) {
+            universals.chport(val);
+            alerts("SUCCESS","The operation performed was successful");
+        }
+        else
+            alerts("RESTRICTED PORT","Setting port below 1024 is not allowed by the Android SubSystem");
 
     }
     public void reset(View v)
@@ -174,11 +180,24 @@ public class setting extends AppCompatActivity {
     }
     public void chup(View v)
     {
+        if (!uploadser.getstat())
+            upstart(null);
         EditText ed = findViewById(R.id.editport1);
         EditText ed2 = findViewById(R.id.editport2);
         String un = ed.getText().toString();
         String ps = ed2.getText().toString();
-        universals.chusrpass(un,ps);
+        if (un.length()>4&&ps.length()>4) {
+            universals.chusrpass(un, ps);
+            alerts("SUCCESS","The operation performed was successful");
+        }
+        else
+            alerts("SHORT LENGTH","The username or password is less than 5 character");
     }
-
+    private void alerts(String tit,String msg)
+    {
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle(tit);
+        adb.setMessage(msg);
+        adb.show();
+    }
 }

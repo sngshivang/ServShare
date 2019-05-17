@@ -43,6 +43,7 @@ public class firstrun extends AppCompatActivity {
         {
             Intent it = new Intent(this,starter.class);
             startActivity(it);
+            finish();
         }
         dr = findViewById(R.id.drawer_layout);
         nv = findViewById(R.id.nav_view);
@@ -301,8 +302,9 @@ public class firstrun extends AppCompatActivity {
         {
             Log.e("firstrun",e.toString());
         }
-        Intent it = new Intent(this,MainActivity.class);
+        Intent it = new Intent(this,starter.class);
         startActivity(it);
+        finish();
 
     }
     private boolean reader()

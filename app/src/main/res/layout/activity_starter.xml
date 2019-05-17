@@ -102,36 +102,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/svst_wr" />
 
-            <Button
-                android:id="@+id/goupl"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
-                android:onClick="cpfl"
-                android:background="@drawable/buttons"
-                android:text="UPLOAD"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView1" />
-
-            <Button
-                android:id="@+id/godwl"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="100dp"
                 android:onClick="dwnfl"
-                android:background="@drawable/buttons"
-                android:text="DOWNLOAD"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/goupl" />
+                app:layout_constraintTop_toBottomOf="@id/textView1"
+                app:srcCompat="@drawable/send_fle_logo"
+                android:contentDescription="@string/ctd_steps"/>
 
-
-
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="6dp"
+                android:contentDescription="@string/ctd_steps"
+                android:onClick="cpfl"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView1"
+                app:srcCompat="@drawable/receive_files_logo" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

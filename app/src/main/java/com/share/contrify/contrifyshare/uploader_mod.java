@@ -1,6 +1,7 @@
 package com.share.contrify.contrifyshare;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ public class uploader_mod extends AppCompatActivity {
         svs_tvu=findViewById(R.id.svst_wru);
         svs_tv=findViewById(R.id.svst_wr);
         iv = findViewById(R.id.imageView7);
+        b1 = findViewById(R.id.goupl);
         navstuff();
         dispval();
     }
@@ -35,12 +38,20 @@ public class uploader_mod extends AppCompatActivity {
     ImageView iv,iv2;
     TextView svs_tvu,svs_tv;
     String ip="";
+    Button b1;
     public void startser(View v)
     {
         if (uploadser.getstat())
-        uploadser.ftpsstart();
-        else
+        {
+            uploadser.ftpsstart();
+            b1.setText(R.string.java_upmod_tx1);
+        }
+        else {
             uploadser.stopser();
+            b1.setText(R.string.java_upmod_tx2);
+        }
+        modimg();
+        modimg2();
     }
     private void navstuff()
     {
@@ -119,11 +130,13 @@ public class uploader_mod extends AppCompatActivity {
             iv2.setImageResource(R.drawable.receive_main_off);
             svs_tvu.setText(R.string.svst_wr2u);
             svs_tvu.setTextColor(Color.parseColor("#FF0000"));
+            b1.setText(R.string.java_upmod_tx2);
         }
         else{
             iv2.setImageResource(R.drawable.receive_main);
             svs_tvu.setText(R.string.svst_wr1u);
             svs_tvu.setTextColor(Color.parseColor("#02F424"));
+            b1.setText(R.string.java_upmod_tx1);
         }
     }
     public void svstart(View v)
@@ -147,12 +160,14 @@ public class uploader_mod extends AppCompatActivity {
             svs_tvu.setText(R.string.svst_wr1u);
             svs_tvu.setTextColor(Color.parseColor("#02F424"));
             uploadser.ftpsstart();
+            b1.setText(R.string.java_upmod_tx1);
         }
         else{
             iv2.setImageResource(R.drawable.receive_main_off);
             svs_tvu.setText(R.string.svst_wr2u);
             svs_tvu.setTextColor(Color.parseColor("#FF0000"));
             uploadser.stopser();
+            b1.setText(R.string.java_upmod_tx2);
         }
     }
     @Override

@@ -1,5 +1,7 @@
 package com.share.contrify.contrifyshare;
 
+import android.util.Log;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -94,7 +96,7 @@ public class Utils {
      * @param useIPv4   true=return ipv4, false=return ipv6
      * @return  address or empty string
      */
-    public static String getIPAddress(boolean useIPv4) {
+    /*public static String getIPAddress(boolean useIPv4) {
         try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
             for (NetworkInterface intf : interfaces) {
@@ -119,6 +121,23 @@ public class Utils {
             }
         } catch (Exception ignored) { } // for now eat exceptions
         return "";
-    }
+    }*/
+    public static String getIPAddress(boolean useIPv4){
+        String out="NOT AVAILABLE";
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address){// && !inetAddress.isLinkLocalAddress() && inetAddress.isSiteLocalAddress()) {
+                        out=inetAddress.getHostAddress();
+                    }
 
+                }
+            }
+        } catch (SocketException ex) {
+            Log.e("LOG_TAG", ex.toString());
+        }
+        return out;
+    }
 }
