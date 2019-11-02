@@ -8,9 +8,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/serv_share_icon_xhdpi"
+        android:icon="@drawable/sv_logo_512"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/sv_logo_512"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".firstrun">
