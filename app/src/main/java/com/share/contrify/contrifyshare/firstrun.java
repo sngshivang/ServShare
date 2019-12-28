@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -41,6 +43,7 @@ public class firstrun extends AppCompatActivity {
         setContentView(R.layout.activity_firstrun);
         if (reader())
         {
+            setdefs(this);
             Intent it = new Intent(this,starter.class);
             startActivity(it);
             finish();
@@ -323,9 +326,58 @@ public class firstrun extends AppCompatActivity {
             Log.e("firstrun",e.toString());
         }
         Log.i("reader",fnl);
-        if (fnl.equals("FR_DISABLE"))
+        if (fnl.equals("FR_DISABLE")) {
             return true;
-        else
+        }
+        else {
+            sysfile2cr();
             return false;
+        }
+    }
+    protected void setdefs(Context ct)
+    {
+        try {
+            String fnl="";
+            File syslf = new File(ct.getFilesDir(), "SYSFILE2");
+            FileReader fr = new FileReader(syslf);
+            BufferedReader br = new BufferedReader(fr);
+            String join;
+            while ((join = br.readLine()) != null) {
+                fnl += join;
+            }
+            JSONObject js = new JSONObject(fnl);
+            String usrnme = js.getString("uplusr");
+            String usrpwd = js.getString("uplpwd");
+            String flp = js.getString("uplpath");
+            int prt = Integer.parseInt(js.getString("dwnprt"));
+            universals.chuplpth(new File(flp));
+            universals.chusrpass(usrnme,usrpwd);
+            universals.chport(prt);
+        }
+        catch (Exception e)
+        {
+            Log.e("setdefs", e.toString());
+        }
+    }
+    private void sysfile2cr()
+    {
+        JSONObject js = new JSONObject();
+        try {
+            js.put("uplusr", "username");
+            js.put("uplpwd", "password");
+            js.put("dwnprt", "53000");
+            js.put("uplpath", Environment.getExternalStorageDirectory().getPath());
+            String out = js.toString();
+            FileWriter fw = new FileWriter(new File(this.getFilesDir(),"SYSFILE2"));
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(out);
+            bw.close();
+        }
+        catch (Exception e)
+        {
+            Log.e("sysfile2cr",e.toString());
+        }
+
+
     }
 }

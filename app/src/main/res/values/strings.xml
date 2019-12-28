@@ -46,6 +46,7 @@
     <string name="frun_h3">If you have reset the application then the steps are also same.</string>
     <string name="frun_b1">EXTRACT</string>
     <string name="set_h1">RESET APPLICATION</string>
+    <string name="set_ex1">MODIFY STORAGE</string>
     <string name="set_h2">This operation will reset the application to its original state. Any user information will be preserved.</string>
     <string name="set_bt1">RESET</string>
     <string name="abt_h1">To contact support email: contrifysoftware@gmail.com</string>
@@ -55,7 +56,7 @@
     <string name="upmod_uname">User Name: NOT AVAILABLE</string>
     <string name="upmod_pass">Password: NOT AVAILABLE</string>
     <string name="upmod_ipa">IP+PORT: NOT AVAILABLE</string>
-    <string name="upmod_files">YOUR FILES ARE STORED AT \"servshare_files\" directory in your storage device.</string>
+    <string name="upmod_files">YOUR FILES ARE STORED AT \"servshare_files\" directory in your selected location (in Settings).</string>
     <string name="upmod_info">INFORMATION: To change the user name or password, head to settings. Transmission of data is done without TLS.</string>
     <string name="upmod_b1">START/STOP SERVER</string>
     <string name="nv_upl">Send Files</string>
@@ -63,9 +64,12 @@
     <string name="set_h3">Change FTP Username/Password</string>
     <string name="set_ed_1">New Username</string>
     <string name="set_ed_2">New Password</string>
-    <string name="set_hnt">Changing the username and password is currently not persistent and resets upon app restart. </string>
+    <string name="set_hnt">Changing the username, password and port information is persistent.</string>
     <string name="java_upmod_tx1">Stop Server</string>
     <string name="java_upmod_tx2">Start Server</string>
+    <string name="set_rb_1">Default Path</string>
+    <string name="set_rb_2">User defined path</string>
+    <string name="set_stset">Unable to find storage path. Restart application.</string>
 
 
 </resources>

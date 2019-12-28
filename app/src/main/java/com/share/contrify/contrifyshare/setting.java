@@ -2,6 +2,7 @@ package com.share.contrify.contrifyshare;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,7 +17,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 public class setting extends AppCompatActivity {
 
@@ -30,11 +38,14 @@ public class setting extends AppCompatActivity {
         iv = findViewById(R.id.imageView7);
         iv2= findViewById(R.id.imageView8);
         svs_tvu=findViewById(R.id.svst_wru);
+        setpathstat(universals.uplpth.getPath());
+        fr = new firstrun();
         navstuff();
     }
     DrawerLayout dr;
     ImageView iv,iv2;
     NavigationView nv;
+    firstrun fr;
     TextView svs_tv,svs_tvu;
     private void navstuff()
     {
@@ -148,7 +159,18 @@ public class setting extends AppCompatActivity {
         String inp = et.getText().toString();
         int val = Integer.parseInt(inp);
         if (val>1023) {
-            universals.chport(val);
+            try {
+                String fnl = readpref();
+                JSONObject js = new JSONObject(fnl);
+                js.put("dwnprt",inp);
+                String out = js.toString();
+                writechanges(out);
+            }
+            catch (Exception e)
+            {
+                Log.e("chngpath", e.toString());
+            }
+            fr.setdefs(this);
             alerts("SUCCESS","The operation performed was successful");
         }
         else
@@ -187,7 +209,19 @@ public class setting extends AppCompatActivity {
         String un = ed.getText().toString();
         String ps = ed2.getText().toString();
         if (un.length()>4&&ps.length()>4) {
-            universals.chusrpass(un, ps);
+            try {
+                String fnl = readpref();
+                JSONObject js = new JSONObject(fnl);
+                js.put("uplusr",un);
+                js.put("uplpwd",ps);
+                String out = js.toString();
+                writechanges(out);
+            }
+            catch (Exception e)
+            {
+                Log.e("chngpath", e.toString());
+            }
+            fr.setdefs(this);
             alerts("SUCCESS","The operation performed was successful");
         }
         else
@@ -199,5 +233,70 @@ public class setting extends AppCompatActivity {
         adb.setTitle(tit);
         adb.setMessage(msg);
         adb.show();
+    }
+    public void moduplpath(View v)
+    {
+        Intent it = new Intent();
+        //it.setType("file/*");
+        it.setAction(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        startActivityForResult(it, 1001);
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Uri ur = data.getData();
+        String fl = FileUtil.getFullPathFromTreeUri(ur,this);
+        Log.i("flpath", fl);
+        try {
+            String fnl = readpref();
+            JSONObject js = new JSONObject(fnl);
+            js.put("uplpath",fl);
+            String out = js.toString();
+            writechanges(out);
+        }
+        catch (Exception e)
+        {
+            Log.e("chngpath", e.toString());
+        }
+        fr.setdefs(this);
+        //TODO handle your request here
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    private void writechanges(String out)
+    {
+        try {
+            File syslf = new File(this.getFilesDir(), "SYSFILE2");
+            syslf.delete();
+            FileWriter fw = new FileWriter(syslf);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(out);
+            bw.close();
+        }
+        catch(Exception e)
+        {
+            Log.e("writechanges",e.toString());
+        }
+    }
+    private String readpref()
+    {
+        String fnl  ="";
+        try {
+
+            File syslf = new File(this.getFilesDir(), "SYSFILE2");
+            FileReader fr = new FileReader(syslf);
+            BufferedReader br = new BufferedReader(fr);
+            String join;
+            while ((join = br.readLine()) != null) {
+                fnl += join;
+            }
+        }
+        catch (Exception e)
+        {
+            Log.e("readpref",e.toString());
+        }
+        return fnl;
+    }
+    private void setpathstat(String inp)
+    {
+        TextView tv = findViewById(R.id.textView9);
+        tv.setText(inp);
     }
 }

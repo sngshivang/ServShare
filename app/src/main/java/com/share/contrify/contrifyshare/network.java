@@ -1,12 +1,15 @@
 package com.share.contrify.contrifyshare;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Network;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import java.lang.String;
 import android.os.Handler;
 import android.os.Looper;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -21,11 +24,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -46,6 +52,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
             final File WEB_ROOT= Environment.getExternalStorageDirectory();
             String DEFAULT_FILE = "/servshare_main.html";
             boolean rnr=true;
+            Context flct;
             private String bound="", frn="SVSHARE_ERR_NF";;
             int cnt=0,tc=0;
             final String FILE_NOT_FOUND = "404.html";
@@ -357,7 +364,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                 File file = new File(WEB_ROOT, DEFAULT_FILE);
                                 int fileLength = (int) file.length();
                                 String content = getContentType(fileRequested);
-
+                                Log.i("TYPE","first");
                                 if (method.equals("GET")||method.equals("POST")) { // GET method so we return content
                                     byte[] fileData = readFileData(file, fileLength);
 
@@ -381,6 +388,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                 Log.i("REQ", fileRequested);
                                 File file = new File(WEB_ROOT, fileRequested);
                                 int fileLength = (int) file.length();
+                                Log.i("TYPE","second");
                                 if (method.equals("GET")||method.equals("POST")) { // GET method so we return content
                                     byte[] fileData = readFileData(file, fileLength);
                                     out.println("HTTP/1.1 200 OK");
@@ -394,11 +402,22 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                     dataOut.flush();
                                 }
                             } else {
-                                fileRequested=fileRequested.replace("%20"," ");
-                                File file = new File(fileRequested);
+                                fileRequested = URLDecoder.decode(fileRequested, "UTF-8");
+                                int cnt = 1;
+                                while (fileRequested.charAt(cnt)!='/')
+                                    cnt++;
+                                String trim = fileRequested.substring(4, cnt);
+                                cnt = Integer.parseInt(trim);
+                                ArrayList<uplfileinfo> al = fileselect.upfildat;
+                                uplfileinfo fl = al.get(cnt);
+                                Log.i("TYPE","third");
+                                Uri ur = fl.fluri;
+                                String size = fl.size;
+                                Log.i("MiscURI", ur.getPath());
                                 Log.i("MiscFile", fileRequested);
-                                int fileLength = (int) file.length();
-                                fis = new FileInputStream(file);
+                                Log.i("MiscSize", size);
+                                ContentResolver ct = universals.fbr.getContentResolver();
+                                InputStream is = ct.openInputStream(ur);
                                 int count;
                                 if (method.equals("GET")||method.equals("POST")) { // GET method so we return content
                                     //byte[] fileData = readFileData(file, fileLength);
@@ -406,10 +425,10 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                     out.println("Contrify Share Socket");
                                     out.println("Date: " + new Date());
                                     //out.println("Content-type: application/octet-stream");
-                                    out.println("Content-length: " + fileLength);
+                                    out.println("Content-length: "+size);
                                     out.println(); // blank line between headers and content, very important !
                                     out.flush(); // flush character output stream buffer
-                                    while ((count = fis.read(buffer)) > 0) {
+                                    while ((count = is.read(buffer)) > 0) {
                                         dataOut.write(buffer, 0, count);
                                         dataOut.flush();
                                     }
@@ -421,15 +440,8 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                         }
                     }
 
-                } catch(FileNotFoundException fnfe){
-                    try {
-                        fileNotFound(out, dataOut, fileRequested);
-                    } catch (IOException ioe) {
-                        System.err.println("Error with file not found exception : " + ioe.getMessage());
-                    }
-
-                } catch(Exception ioe){
-                    System.err.println("Server error : " + ioe);
+                }  catch(Exception ioe){
+                    Log.e("Server error : ",ioe.toString());
                 } finally{
                     try {
                         bfis.close();

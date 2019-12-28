@@ -2,10 +2,12 @@ package com.share.contrify.contrifyshare;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class fileselect extends AppCompatActivity {
@@ -40,6 +44,7 @@ public class fileselect extends AppCompatActivity {
         svs_tv = findViewById(R.id.svst_wr);
         lst.setEmptyView(findViewById(R.id.elv2));
         st = new studadap(this,al);
+
         dr = findViewById(R.id.drawer_layout);
         iv2= findViewById(R.id.imageView8);
         svs_tvu=findViewById(R.id.svst_wru);
@@ -87,10 +92,13 @@ public class fileselect extends AppCompatActivity {
     TextView svs_tv,svs_tvu;
     ImageView iv,iv2;
     static ArrayList<fieldsinfo> al = new ArrayList<>();
+    uplfileinfo tup;
+    static ArrayList<uplfileinfo> upfildat = new ArrayList<>();
+    static DecimalFormat df = new DecimalFormat("0.00");
     studadap st;
     fieldsinfo ifo;
     ListView lst;
-    String fname=null,fpath=null,fattr=null;
+    static int itms = 0;
     static ArrayList<String> ar = new ArrayList<>();
     ArrayList<File> arf;
     public void addfile(View v)
@@ -99,6 +107,8 @@ public class fileselect extends AppCompatActivity {
         it.setType("*/*");
         it.addCategory(Intent.CATEGORY_OPENABLE);
         it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+        //it.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        it.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         it.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(it,""),1001);
     }
@@ -115,18 +125,35 @@ public class fileselect extends AppCompatActivity {
             {
                 if (data.getClipData() != null) {
 
-                    File fd;
                     try {
                         cnt = data.getClipData().getItemCount();
-                        //fd = new File(currFileURI.getPath());
                         for (; ini < cnt; ini++) {
                             currFileURI = data.getClipData().getItemAt(ini).getUri();
-                            fd = new File(FileChooser.getPath(this, currFileURI));
-                            tojson(fd);
-                            String pth = fd.getPath();
-                            fname = findnme(pth);
-                            fpath = pth;
-                            ifo = new fieldsinfo(fname, "", fpath);
+                            universals.crcontext(this);
+                            universals.crunivuri(currFileURI);
+                            Cursor cr = getContentResolver().query(currFileURI, null, null, null, null, null);
+                            String nx="", sx="";
+                            try {
+                                if (cr != null && cr.moveToFirst()) {
+                                    nx = cr.getString(cr.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                                    sx = cr.getString(cr.getColumnIndex(OpenableColumns.SIZE));
+                                }
+                                cr.close();
+                            } catch (Exception e)
+                            {
+                                Log.e("Cursor:",e.toString());
+                            }
+                            tup = new uplfileinfo(currFileURI, sx);
+                            upfildat.add(tup);
+                            String net = "/ssq"+String.valueOf(itms)+"/"+nx;
+                            itms++;
+                            Log.i("TestURI",net);
+                            float dc = Float.parseFloat(sx);
+                            dc = (dc/1024)/1024;
+                            String sdc = df.format(dc);
+                            sdc += " MB";
+                            tojson(net);
+                            ifo = new fieldsinfo(nx, "", sdc);
                             st.add(ifo);
                             lst.setAdapter(st);
                         }
@@ -137,15 +164,34 @@ public class fileselect extends AppCompatActivity {
                 }
                 else if (data.getData()!=null)
                 {
-                    File fd;
                     try{
                         currFileURI=data.getData();
-                        fd = new File(FileChooser.getPath(this,currFileURI));
-                        tojson(fd);
-                        String pth = fd.getPath();
-                        fname = findnme(pth);
-                        fpath = pth;
-                        ifo = new fieldsinfo(fname, "", fpath);
+                        universals.crcontext(this);
+                        universals.crunivuri(currFileURI);
+                        Cursor cr = getContentResolver().query(currFileURI, null, null, null, null, null);
+                        String nx="", sx="";
+                        try {
+                            if (cr != null && cr.moveToFirst()) {
+                                nx = cr.getString(cr.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                                sx = cr.getString(cr.getColumnIndex(OpenableColumns.SIZE));
+                            }
+                            cr.close();
+                        } catch (Exception e)
+                        {
+                            Log.e("Cursor:",e.toString());
+                        }
+                        tup = new uplfileinfo(currFileURI, sx);
+                        upfildat.add(tup);
+                        String net = "/ssq"+String.valueOf(itms)+"/"+nx;
+                        itms++;
+                        Log.i("TestURI",net);
+                        float dc = Float.parseFloat(sx);
+                        dc = (dc/1024)/1024;
+                        tojson(net);
+                        String sdc = df.format(dc);
+                        sdc += " MB";
+                        tojson(net);
+                        ifo = new fieldsinfo(nx, "", sdc);
                         st.add(ifo);
                         lst.setAdapter(st);
 
@@ -157,11 +203,11 @@ public class fileselect extends AppCompatActivity {
             }
 
         }}
-    private void tojson(File inp)
+    private void tojson(String inp)
     {
-        arf.add(inp);
-        Log.i("Eindoed",inp.getPath());
-        ar.add(inp.toString());
+        //arf.add(inp);
+        //Log.i("Eindoed",inp.getPath());
+        ar.add(inp);
         JSONArray jr = new JSONArray(ar);
         writetofile(jr.toString());
     }

@@ -20,8 +20,9 @@ import java.util.List;
 public class uploadser  {
     public static FtpServer server;
     public static void ftpsstart() {
-        final File WEB_ROOT = Environment.getExternalStorageDirectory();
+        final File WEB_ROOT = universals.uplpth;
         try {
+            Log.i("Filepath",WEB_ROOT.getPath());
             new File(WEB_ROOT, "servshare_files").mkdirs();
             PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
             UserManager userManager = userManagerFactory.createUserManager();

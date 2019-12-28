@@ -26,7 +26,8 @@
         <activity android:name=".about" />
         <activity android:name=".MainActivity" />
         <activity android:name=".uploader_mod" />
-        <activity android:name=".starter"></activity>
+        <activity android:name=".starter" />
+        <activity android:name=".test_activity"></activity>
     </application>
 
 </manifest>
