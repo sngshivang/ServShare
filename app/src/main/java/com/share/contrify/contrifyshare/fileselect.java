@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -31,6 +32,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Vector;
 
 public class fileselect extends AppCompatActivity {
 
@@ -40,14 +45,15 @@ public class fileselect extends AppCompatActivity {
         setContentView(R.layout.activity_fileselect);
         arf = new ArrayList<>();
         iv = findViewById(R.id.imageView7);
+        nv = findViewById(R.id.nav_view);
         lst = findViewById(R.id.filelst);
         svs_tv = findViewById(R.id.svst_wr);
         lst.setEmptyView(findViewById(R.id.elv2));
         st = new studadap(this,al);
-
         dr = findViewById(R.id.drawer_layout);
         iv2= findViewById(R.id.imageView8);
         svs_tvu=findViewById(R.id.svst_wru);
+        navstuff();
     }
     @Override
     protected void onResume()
@@ -59,6 +65,43 @@ public class fileselect extends AppCompatActivity {
         st = new studadap(this,al);
         lst.setAdapter(st);
 
+    }
+    private void navstuff()
+    {
+        nv.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem mt) {
+                        mt.setChecked(true);
+                        if (mt.getItemId()==R.id.nav_home)
+                        {
+                            Intent it = new Intent(fileselect.this,starter.class);
+                            startActivity(it);
+                        }
+                        else if (mt.getItemId()==R.id.nav_set)
+                        {
+                            Intent it = new Intent(fileselect.this,setting.class);
+                            startActivity(it);
+                        }
+                        else if (mt.getItemId()==R.id.nav_about)
+                        {
+                            Intent it = new Intent(fileselect.this,about.class);
+                            startActivity(it);
+                        }
+                        else if (mt.getItemId()==R.id.nav_upl)
+                        {
+                            Intent it = new Intent(fileselect.this,MainActivity.class);
+                            startActivity(it);
+                        }
+                        else if (mt.getItemId()==R.id.nav_dwn)
+                        {
+                            Intent it = new Intent(fileselect.this,uploader_mod.class);
+                            startActivity(it);
+                        }
+                        dr.closeDrawers();
+                        return true;
+                    }
+                });
     }
     private void modimg()
     {
@@ -107,9 +150,9 @@ public class fileselect extends AppCompatActivity {
         it.setType("*/*");
         it.addCategory(Intent.CATEGORY_OPENABLE);
         it.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
-        //it.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        it.setAction(Intent.ACTION_OPEN_DOCUMENT);
         it.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        it.setAction(Intent.ACTION_GET_CONTENT);
+        //it.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(it,""),1001);
     }
     public void opendrawer(View v)
@@ -187,7 +230,6 @@ public class fileselect extends AppCompatActivity {
                         Log.i("TestURI",net);
                         float dc = Float.parseFloat(sx);
                         dc = (dc/1024)/1024;
-                        tojson(net);
                         String sdc = df.format(dc);
                         sdc += " MB";
                         tojson(net);
@@ -280,18 +322,26 @@ public class fileselect extends AppCompatActivity {
     }
     public void rmfile(View v)
     {
+        Vector<Integer> vct = new Vector<>();
         for (fieldsinfo p:st.getBox())
         {
             if (p.chkbx)
             {
-                rmfromalst(p.pos);
+                vct.add(p.pos);
             }
         }
+        rmfromalst(vct);
     }
-    private void rmfromalst(int pos)
+    private void rmfromalst(Vector<Integer> pos)
     {
-        al.remove(pos);
-        ar.remove(pos);
+        Collections.reverse(pos);
+        int posi;
+        Iterator<Integer> it = pos.iterator();
+        while (it.hasNext()) {
+            posi = it.next();
+            al.remove(posi);
+            ar.remove(posi);
+        }
         st= new studadap(this,al);
         lst.setAdapter(st);
         JSONArray jr = new JSONArray(ar);

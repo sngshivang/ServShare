@@ -26,8 +26,9 @@
     <string name="pchwr">WARNING: You are attempting to change the default HTTP port. Please ensure that the port is not blocked, reserved or is in use by other application. Non compliance may lead to problems with your network configuration.</string>
     <string name="abtus">A B O U T</string>
     <string name="abtus_ver">Version:</string>
-    <string name="abtus_vrn">0.1.6</string>
+    <string name="abtus_vrn">0.1.7</string>
     <string name="abtus_cpr">Copyright \u00A9 reserved. No part of this software and all resources associated with the brand \'ServShare\' and \'ContrifyShare\' shall be used without prior permission. Distribution of software is free and all usage including commercial usage of this application is allowed as long as all usage are in purview of the copyright policy. </string>
+    <string name="abtus_cpr_ap">Implementation of Apache FTPServer is licensed by Apache License 2.0. Read about it at https://www.apache.org/licenses/LICENSE-2.0 </string>
     <string name="abtus_cpr2">This software has been tested in multiple testing conditions and various instances have been simulated to study the response and impact. The response and the impact of these studies were deemed to be satisfactory. </string>
     <string name="abtus_cp3">NETWORK INTERFERENCE: This software accepts connection on Port 53000 (Default) on the TCP/IP. This is an unreserved port so please ensure that this port isn\'t blocked or in use by other application or server. If it doesn\'t help, consider changing the port in the Settings.</string>
     <string name="abtus_git">This project is available on GitHub</string>
