@@ -1,0 +1,56 @@
+<ScrollView xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFF6F3"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:background="#FFF6F3"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/calibri"
+            android:text="@string/str_h1"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView1"
+            app:srcCompat="@drawable/send_fle_logo"
+            android:contentDescription="@string/ctd_steps"/>
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="6dp"
+            android:contentDescription="@string/ctd_steps"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView1"
+            app:srcCompat="@drawable/receive_files_logo" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

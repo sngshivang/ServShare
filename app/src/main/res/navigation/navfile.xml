@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navfile"
+    app:startDestination="@id/mainselector">
+
+    <fragment
+        android:id="@+id/mainselector"
+        android:name="com.share.contrify.contrifyshare.mainselector"
+        tools:layout="@layout/fragment_mainselector" >
+        <action
+            android:id="@+id/action_mainselector_to_fileupload"
+            app:destination="@id/fileupload"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_mainselector_to_filedownload"
+            app:destination="@id/filedownload"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_mainselector_to_fileselector"
+            app:destination="@id/fileselector" />
+    </fragment>
+    <fragment
+        android:id="@+id/filedownload"
+        android:name="com.share.contrify.contrifyshare.filedownload"
+        tools:layout="@layout/fragment_filedownload" />
+    <fragment
+        android:id="@+id/fileupload"
+        android:name="com.share.contrify.contrifyshare.fileupload"
+        tools:layout="@layout/fragment_fileupload" >
+        <action
+            android:id="@+id/action_fileupload_to_fileselector"
+            app:destination="@id/fileselector"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/aboutfrag"
+        android:name="com.share.contrify.contrifyshare.aboutfrag"
+        tools:layout="@layout/fragment_aboutfrag" />
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.share.contrify.contrifyshare.settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/fileselector"
+        android:name="com.share.contrify.contrifyshare.fileselector"
+        tools:layout="@layout/fragment_fileselector" >
+        <action
+            android:id="@+id/action_fileselector_to_fileupload"
+            app:destination="@id/fileupload"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+</navigation>

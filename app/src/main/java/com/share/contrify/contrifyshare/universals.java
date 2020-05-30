@@ -8,6 +8,7 @@ import android.os.Environment;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
 
 public class universals {
     public static int port=53000;
@@ -16,7 +17,11 @@ public class universals {
     public static File uplpth = Environment.getExternalStorageDirectory();
     public static Uri univuri;
     public static Context fbr;
+    public static int directtrans = 0;
+    public static ArrayList<Uri> multitrans;
+    public static Uri singtrans;
     public static InputStream ist;
+    public static ArrayList<fieldsinfo> al = new ArrayList<>();
 
     public static void chport(int prt)
     {

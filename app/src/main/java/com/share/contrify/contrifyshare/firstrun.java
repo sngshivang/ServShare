@@ -1,18 +1,14 @@
 package com.share.contrify.contrifyshare;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Environment;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,6 +16,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
+
+import org.apache.log4j.chainsaw.Main;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -32,8 +31,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 public class firstrun extends AppCompatActivity {
 
@@ -41,19 +47,14 @@ public class firstrun extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firstrun);
+        Log.i("firstrun","Worksfine");
         if (reader())
         {
             setdefs(this);
-            Intent it = new Intent(this,starter.class);
+            Intent it = new Intent(this,MainActivity.class);
             startActivity(it);
             finish();
         }
-        dr = findViewById(R.id.drawer_layout);
-        nv = findViewById(R.id.nav_view);
-        svs_tv = findViewById(R.id.svst_wr);
-        iv = findViewById(R.id.imageView7);
-        iv2= findViewById(R.id.imageView8);
-        svs_tvu=findViewById(R.id.svst_wru);
         if (ActivityCompat.checkSelfPermission(firstrun.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -76,117 +77,9 @@ public class firstrun extends AppCompatActivity {
                 // result of the request.
             }
         }
-        navstuff();
-        modimg();
     }
     int perval;
-    DrawerLayout dr;
-    NavigationView nv;
-    TextView svs_tv,svs_tvu;
-    ImageView iv,iv2;
-    private void navstuff()
-    {
-        nv.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem mt) {
-                        mt.setChecked(true);
-                        if (mt.getItemId()==R.id.nav_home)
-                        {
-                            Intent it = new Intent(firstrun.this,starter.class);
-                            startActivity(it);
-                        }
-                        else if (mt.getItemId()==R.id.nav_set)
-                        {
-                            Intent it = new Intent(firstrun.this,setting.class);
-                            startActivity(it);
-                        }
-                        else if (mt.getItemId()==R.id.nav_about)
-                        {
-                            Intent it = new Intent(firstrun.this,about.class);
-                            startActivity(it);
-                        }
-                        else if (mt.getItemId()==R.id.nav_upl)
-                        {
-                            Intent it = new Intent(firstrun.this,MainActivity.class);
-                            startActivity(it);
-                        }
-                        else if (mt.getItemId()==R.id.nav_dwn)
-                        {
-                            Intent it = new Intent(firstrun.this,uploader_mod.class);
-                            startActivity(it);
-                        }
-                        dr.closeDrawers();
-                        return true;
-                    }
-                });
-    }
-    public void opendrawer(View v)
-    {
-        dr.openDrawer(GravityCompat.START);
-    }
-    private void modimg()
-    {
-        if (sv_module.getstat()) {
-            iv.setImageResource(R.drawable.send_main);
-            svs_tv.setText(R.string.svst_wr1);
-            svs_tv.setTextColor(Color.parseColor("#02F424"));
-        }
-        else{
-            iv.setImageResource(R.drawable.send_main_off);
-            svs_tv.setText(R.string.svst_wr2);
-            svs_tv.setTextColor(Color.parseColor("#FF0000"));
-        }
-    }
-    private void modimg2()
-    {
-        if (uploadser.getstat()) {
-            iv2.setImageResource(R.drawable.receive_main_off);
-            svs_tvu.setText(R.string.svst_wr2u);
-            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
-        }
-        else{
-            iv2.setImageResource(R.drawable.receive_main);
-            svs_tvu.setText(R.string.svst_wr1u);
-            svs_tvu.setTextColor(Color.parseColor("#02F424"));
-        }
-    }
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        modimg();
-        modimg2();
-    }
-    public void svstart(View v)
-    {
-        if (sv_module.getstat()){
-            iv.setImageResource(R.drawable.send_main_off);
-            svs_tv.setText(R.string.svst_wr2);
-            svs_tv.setTextColor(Color.parseColor("#FF0000"));
-        }
-        else{
-            iv.setImageResource(R.drawable.send_main);
-            svs_tv.setText(R.string.svst_wr1);
-            svs_tv.setTextColor(Color.parseColor("#02F424"));
-        }
-        sv_module.ststart();
-    }
-    public void upstart(View v)
-    {
-        if (uploadser.getstat()){
-            iv2.setImageResource(R.drawable.receive_main);
-            svs_tvu.setText(R.string.svst_wr1u);
-            svs_tvu.setTextColor(Color.parseColor("#02F424"));
-            uploadser.ftpsstart();
-        }
-        else{
-            iv2.setImageResource(R.drawable.receive_main_off);
-            svs_tvu.setText(R.string.svst_wr2u);
-            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
-            uploadser.stopser();
-        }
-    }
+
     public void cpfl(View v)
     {
         AlertDialog.Builder abd = new AlertDialog.Builder(this);
@@ -305,7 +198,7 @@ public class firstrun extends AppCompatActivity {
         {
             Log.e("firstrun",e.toString());
         }
-        Intent it = new Intent(this,starter.class);
+        Intent it = new Intent(this, MainActivity.class);
         startActivity(it);
         finish();
 

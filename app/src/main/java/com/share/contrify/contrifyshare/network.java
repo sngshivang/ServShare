@@ -408,7 +408,7 @@ public class network extends AsyncTask <Socket, Integer, Void> {
                                     cnt++;
                                 String trim = fileRequested.substring(4, cnt);
                                 cnt = Integer.parseInt(trim);
-                                ArrayList<uplfileinfo> al = fileselect.upfildat;
+                                ArrayList<uplfileinfo> al = fileselector.upfildat;
                                 uplfileinfo fl = al.get(cnt);
                                 Log.i("TYPE","third");
                                 Uri ur = fl.fluri;

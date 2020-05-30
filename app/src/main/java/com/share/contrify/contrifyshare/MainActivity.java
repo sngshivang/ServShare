@@ -1,62 +1,102 @@
 package com.share.contrify.contrifyshare;
 
 import android.Manifest;
-import android.content.Context;
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.graphics.Color;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.NavGraph;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
 import android.net.Uri;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.apache.log4j.chainsaw.Main;
-import org.json.JSONArray;
-
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.FileReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.StringTokenizer;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements aboutfrag.OnFragmentInteractionListener, filedownload.OnFragmentInteractionListener, fileselector.OnFragmentInteractionListener, fileupload.OnFragmentInteractionListener, mainselector.OnFragmentInteractionListener, settings.OnFragmentInteractionListener {
 
     int perval = 1;
-    ImageView iv,iv2;
     public String ip;
+    NavController navController;
+    NavGraph ng;
+    AdView mAdView;
+    AppBarConfiguration apbr;
+    Toolbar mytoolbar;
+    NavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dr = findViewById(R.id.drawer_layout);
-        nv = findViewById(R.id.nav_view);
+        setTitle("Teslacoil");
+        dl = findViewById(R.id.drawer_layout);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        ng = navController.getGraph();
+        apbr = new AppBarConfiguration.Builder(ng).setDrawerLayout(dl).build();
+        mytoolbar = findViewById(R.id.my_toolbar);
+        //mytoolbar.setContentInsetsAbsolute(0, 0);
+        mytoolbar.inflateMenu(R.menu.menu_main);
+        setSupportActionBar(mytoolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle(null);
+        //ab.setDisplayHomeAsUpEnabled(false);
+        //ab.setHomeAsUpIndicator(getResources().getDrawable(R.drawable.hamburg_icon));
+        //getSupportActionBar().setHomeButtonEnabled(true);
+        //getSupportActionBar().hide();
+        //ab.setLogo(R.drawable.sv_logo2);
+        //ab.setDisplayUseLogoEnabled(true);
+        ab.setDisplayShowTitleEnabled(true);
+        //Toolbar toolbar = findViewById(R.id.my_toolbar);
+        navView = findViewById(R.id.nav_view);
+        NavigationUI.setupActionBarWithNavController(this, navController, dl);
+        NavigationUI.setupWithNavController(navView, navController);
+        NavigationUI.setupWithNavController(mytoolbar, navController, apbr);
         svs_tv = findViewById(R.id.svst_wr);
         navstuff();
-        iv2= findViewById(R.id.imageView9);
+        //iv2= findViewById(R.id.imageView9);
         svs_tvu=findViewById(R.id.svst_wru);
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -80,138 +120,287 @@ public class MainActivity extends AppCompatActivity {
                 // result of the request.
             }
         }
-        iv = findViewById(R.id.imageView7);
-        getcurrip();
+        Intent it2 = getIntent();
+        String action = it2.getAction();
+        String type = it2.getType();
+        if (Intent.ACTION_SEND.equals(action) && type != null)
+        {
+            handleunitfile(it2);
+        }
+        else if (Intent.ACTION_OPEN_DOCUMENT.equals(action) && type != null)
+        {
+            handleunitfile(it2);
+        }
+        if (Intent.ACTION_SEND_MULTIPLE.equals(action)  && type != null) {
+            handlefiles(it2);
+        }
+        checkdirectsend();
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.adView);
+        try {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }
+        catch (Exception e)
+        {
+            Log.e("ADERROR", e.toString());
+        }
+        mAdView.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded()
+            {
+                Log.i("AD","addloaded");
+                layoutmanip2();
+            }
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                Log.e("ADFAIL",String.valueOf(errorCode));
+            }
+
+        });
+
 
     }
-    DrawerLayout dr;
-    NavigationView nv;
+    DrawerLayout dl;
+    Menu umenu;
     TextView svs_tv,svs_tvu;
+    void handlefiles(Intent intent) {
+        ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+        if (imageUris != null) {
+            universals.multitrans = imageUris;
+            universals.directtrans = 1;
+        }
+    }
+    void handleunitfile(Intent intent) {
+        Uri imageUri =  intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        if (imageUri != null) {
+            universals.singtrans = imageUri;
+            universals.directtrans = 2;
+        }
+    }
     private void navstuff()
     {
-        nv.setNavigationItemSelectedListener(
+        navView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem mt) {
-                        mt.setChecked(true);
                         if (mt.getItemId()==R.id.nav_home)
                         {
-                            Intent it = new Intent(MainActivity.this,starter.class);
-                            startActivity(it);
+                            Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.mainselector);
+
                         }
                         else if (mt.getItemId()==R.id.nav_set)
                         {
-                            Intent it = new Intent(MainActivity.this,setting.class);
-                            startActivity(it);
+                            Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.settings);
+
                         }
                         else if (mt.getItemId()==R.id.nav_about)
                         {
-                            Intent it = new Intent(MainActivity.this,about.class);
-                            startActivity(it);
+                            Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.aboutfrag);
+
                         }
                         else if (mt.getItemId()==R.id.nav_upl)
                         {
-                            Intent it = new Intent(MainActivity.this,MainActivity.class);
-                            startActivity(it);
+                            Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.fileupload);
+
                         }
                         else if (mt.getItemId()==R.id.nav_dwn)
                         {
-                            Intent it = new Intent(MainActivity.this,uploader_mod.class);
-                            startActivity(it);
+                            Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.filedownload);
+
                         }
-                        dr.closeDrawers();
+
+                        dl.closeDrawers();
                         return true;
                     }
                 });
-    }
-    public void opendrawer(View v)
-    {
-        dr.openDrawer(GravityCompat.START);
-    }
-    protected void getcurrip()
-    {
-        ip=Utils.getIPAddress(true);
-        TextView tv = findViewById(R.id.textView8);
-        if (ip.equals(""))
-            tv.setText("NOT CONNECTED");
-        else
-            tv.setText((ip+":"+universals.port));
-        Log.i("IPA",ip);
-
-
     }
     @Override
     protected void onResume()
     {
         super.onResume();
-        getcurrip();
         modimg();
         modimg2();
 
     }
     private void modimg()
     {
-        if (sv_module.getstat()) {
-            iv.setImageResource(R.drawable.send_main);
-            svs_tv.setText(R.string.svst_wr1);
-            svs_tv.setTextColor(Color.parseColor("#02F424"));
-        }
-        else{
-            iv.setImageResource(R.drawable.send_main_off);
-            svs_tv.setText(R.string.svst_wr2);
-            svs_tv.setTextColor(Color.parseColor("#FF0000"));
+        if (umenu!=null) {
+            if (sv_module.getstat()) {
+                umenu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.send_main));
+                svs_tv.setText(R.string.svst_wr1);
+                svs_tv.setTextColor(Color.parseColor("#02F424"));
+            } else {
+                umenu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.send_main_off));
+                svs_tv.setText(R.string.svst_wr2);
+                svs_tv.setTextColor(Color.parseColor("#FF0000"));
+            }
         }
     }
     private void modimg2()
     {
-        if (uploadser.getstat()) {
-            iv2.setImageResource(R.drawable.receive_main_off);
-            svs_tvu.setText(R.string.svst_wr2u);
-            svs_tvu.setTextColor(Color.parseColor("#FF0000"));
-        }
-        else{
-            iv2.setImageResource(R.drawable.receive_main);
-            svs_tvu.setText(R.string.svst_wr1u);
-            svs_tvu.setTextColor(Color.parseColor("#02F424"));
+        if (umenu!=null) {
+            if (uploadser.getstat()) {
+                umenu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.receive_main_off));
+                svs_tvu.setText(R.string.svst_wr2u);
+                svs_tvu.setTextColor(Color.parseColor("#FF0000"));
+            } else {
+                umenu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.receive_main));
+                svs_tvu.setText(R.string.svst_wr1u);
+                svs_tvu.setTextColor(Color.parseColor("#02F424"));
+            }
         }
     }
-    public void addfileit(View v)
-    {
-        Intent it = new Intent(this,fileselect.class);
-        startActivity(it);
-    }
-    public void svstart(View v)
+    private void svstart()
     {
         if (sv_module.getstat()){
-            iv.setImageResource(R.drawable.send_main_off);
+            umenu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.send_main_off));
             svs_tv.setText(R.string.svst_wr2);
             svs_tv.setTextColor(Color.parseColor("#FF0000"));
         }
         else{
-            iv.setImageResource(R.drawable.send_main);
+            umenu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.send_main));
             svs_tv.setText(R.string.svst_wr1);
             svs_tv.setTextColor(Color.parseColor("#02F424"));
         }
         sv_module.ststart();
     }
-    public void upstart(View v)
+    private void upstart()
     {
         if (uploadser.getstat()){
-            iv2.setImageResource(R.drawable.receive_main);
+            umenu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.receive_main));
             svs_tvu.setText(R.string.svst_wr1u);
             svs_tvu.setTextColor(Color.parseColor("#02F424"));
             uploadser.ftpsstart();
         }
         else{
-            iv2.setImageResource(R.drawable.receive_main_off);
+            umenu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.receive_main_off));
             svs_tvu.setText(R.string.svst_wr2u);
             svs_tvu.setTextColor(Color.parseColor("#FF0000"));
             uploadser.stopser();
         }
     }
-    public void upst(View v)
+    private void checkdirectsend()
+    {
+        if (universals.directtrans != 0)
+        {
+            universals.al.clear();
+            String fnl="";
+            try {
+                FileReader fr = new FileReader(new File(this.getFilesDir(), "SYSFILE1"));
+                BufferedReader br = new BufferedReader(fr);
+                String join;
+                while ((join=br.readLine())!=null)
+                {
+                    fnl+=join;
+                }
+            }catch (Exception e)
+            {
+                Log.e("firstrun",e.toString());
+            }
+            Log.i("reader",fnl);
+            if (fnl.equals("FR_DISABLE")) {
+                navController.navigate(R.id.action_mainselector_to_fileupload);
+
+            }
+            else {
+                AlertDialog.Builder adb = new AlertDialog.Builder(this);
+                adb.setTitle("ERROR!");
+                adb.setMessage("First run operations have not been completed yet. Please start this application direct from your menu to complete the first run procedure.\nThis app will exit now");
+                adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                        System.exit(0);
+
+                    }
+                });
+                adb.setCancelable(false);
+                adb.create();
+                adb.show();
+            }
+        }
+    }
+    /*public void upst(View v)
     {
         Intent it = new Intent(this, uploader_mod.class);
         startActivity(it);
+    }*/
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.receive:
+                upstart();
+                return super.onOptionsItemSelected(item);
+            case R.id.send:
+                svstart();
+                return super.onOptionsItemSelected(item);
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu, this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        umenu = menu;
+        modimg();
+        modimg2();
+        //triggerstuff();
+        return true;
+    }
+    @Override
+    public void triggerstuff(int inp)
+    {
+        Log.i("trigger",String.valueOf(inp));
+        if (inp == 1)
+        {
+            svstart();
+        }
+        else if (inp == 2)
+        {
+            upstart();
+        }
+    }
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+    }
+    private void layoutmanip2()
+    {
+        final ConstraintLayout dl = findViewById(R.id.content_frame);
+        dl.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()  {
+            @Override
+            public void onGlobalLayout() {
+                int hei = dl.getMeasuredHeight();
+                //dl.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                //final TypedArray styledAttributes = MainActivity.this.getTheme().obtainStyledAttributes(
+                       // new int[]{android.R.attr.actionBarSize});
+                //final int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
+                //styledAttributes.recycle();
+                int mActionBarSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 65, getResources().getDisplayMetrics());
+                int ad = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+                final int net = hei - mActionBarSize - ad;
+                final FragmentContainerView ft = findViewById(R.id.nav_host_fragment);
+                ft.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()  {
+                    @Override
+                    public void onGlobalLayout() {
+                        int hei = ft.getHeight();
+                        ft.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        ConstraintLayout.LayoutParams fl = (ConstraintLayout.LayoutParams) ft.getLayoutParams();
+                        fl.height = net;
+                        ft.setLayoutParams(fl);
+                    }});
+
+
+            }
+        });
+    }
+
 }
