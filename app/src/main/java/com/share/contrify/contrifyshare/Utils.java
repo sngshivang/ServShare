@@ -1,5 +1,6 @@
 package com.share.contrify.contrifyshare;
 
+import android.content.Intent;
 import android.util.Log;
 
 import java.io.*;
@@ -124,16 +125,43 @@ public class Utils {
     }*/
     public static String getIPAddress(boolean useIPv4){
         String out="NOT AVAILABLE";
+        ArrayList<String> templist = new ArrayList<>();
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
                 NetworkInterface intf = en.nextElement();
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address){// && !inetAddress.isLinkLocalAddress() && inetAddress.isSiteLocalAddress()) {
-                        out=inetAddress.getHostAddress();
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address && !inetAddress.isLinkLocalAddress() && inetAddress.isSiteLocalAddress()){
+                        // && !inetAddress.isLinkLocalAddress() && inetAddress.isSiteLocalAddress()) {
+                        //out=inetAddress.getHostAddress();
+                        templist.add(inetAddress.getHostAddress());
+                        Log.i("IP_all", out);
                     }
 
                 }
+            }
+            int max = 0;
+            for (String inp: templist)
+            {
+                try {
+                    int num = Integer.parseInt(inp.substring(0, 2));
+                    Log.d("IPnum", String.valueOf(num));
+                    if (num > max)
+                    {
+                        max = num;
+                        out = inp;
+                    }
+
+                }
+                catch (NumberFormatException ne)
+                {
+                    Log.e("Utils_getIPAddress", ne.toString());
+                }
+                catch (Exception e)
+                {
+                    Log.e("Utils_getIPAddress", e.toString());
+                }
+
             }
         } catch (SocketException ex) {
             Log.e("LOG_TAG", ex.toString());
